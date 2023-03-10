@@ -1,0 +1,184 @@
+**Load forecasting model
+
+MODEL: 24-64-512-24
+
+Batch_size = 32
+EPOCHS = 5000
+LEARNING_RATE = 0.0001
+The Best Epoch: 4958  |  The Best Validation Error: 10642.425781
+Test Loss
+MSE: 14353.967773
+MAE: 80.541473
+MAPE(%): 8.487802
+
+Batch_size = 32
+EPOCHS = 5000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 4985  |  The Best Validation Error: 6176.105957
+Test Loss
+MSE: 22801.164062
+MAE: 105.603607
+MAPE(%): 11.775856
+
+
+
+
+
+MODEL: 24-256-1024-24
+
+EPOCHS = 5000
+LEARNING_RATE = 0.0001
+The Best Epoch: 4982  |  The Best Validation Error: 2199.858398
+Test Loss
+MSE: 25280.589844
+MAE: 106.557533
+MAPE(%): 11.185781
+
+
+EPOCHS = 5000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 4994  |  The Best Validation Error: 3104.597900
+Test Loss
+MSE: 20742.689453
+MAE: 100.512085
+MAPE(%): 11.208912
+
+
+
+
+---------------------------------------------
+
+
+
+**PV forecasting model
+
+
+MODEL: 24-64-512-24
+
+Batch_size = 1024
+EPOCHS = 1000
+LEARNING_RATE = 0.0001
+The Best Epoch: 866  |  The Best Validation Error: 13755.056641
+Test Loss
+MSE: 8199.102539
+MAE: 47.546272
+
+
+Batch_size = 1024
+EPOCHS = 1000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 728  |  The Best Validation Error: 12587.357422
+Test Loss
+MSE: 8298.375000
+MAE: 47.812458
+
+
+MODEL: 24-256-1024-24
+
+Batch_size = 1024
+EPOCHS = 1000
+LEARNING_RATE = 0.0001
+The Best Epoch: 683  |  The Best Validation Error: 13525.624023
+Test Loss
+MSE: 8187.356445
+MAE: 48.196213
+
+Batch_size = 1024
+EPOCHS = 1000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 380  |  The Best Validation Error: 12275.916992
+Test Loss
+MSE: 8487.186523
+MAE: 46.934536
+
+
+
+-----------------------------------------
+
+
+**forecast weather data pv forecasting model
+
+
+MODEL: 24-64-512-24
+
+1-1
+Batch_size = 32
+EPOCHS = 10000
+LEARNING_RATE = 0.0001
+The Best Epoch: 9944  |  The Best Validation Error: 0.304964
+Test Loss
+MSE: 21351.980469
+MAE: 73.071495
+
+
+1-2
+Batch_size = 32
+EPOCHS = 40000
+LEARNING_RATE = 0.0001
+The Best Epoch: 26619  |  The Best Validation Error: 0.000354
+Test Loss
+MSE: 19538.835938
+MAE: 70.183182
+
+
+2-1
+Batch_size = 32
+EPOCHS = 10000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 9913  |  The Best Validation Error: 222.472153
+Test Loss
+MSE: 13281.812500
+MAE: 57.347851
+
+
+2-2
+Batch_size = 32
+EPOCHS = 40000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 38712  |  The Best Validation Error: 26.804066
+Test Loss
+MSE: 11524.165039
+MAE: 54.900784
+
+
+
+MODEL: 24-256-1024-24
+
+
+3.
+Batch_size = 32
+EPOCHS = 40000
+LEARNING_RATE = 0.0001
+The Best Epoch: 24830  |  The Best Validation Error: 0.000175
+Test Loss
+MSE: 13777.208984
+MAE: 56.598301
+
+
+4.
+Batch_size = 32
+EPOCHS = 40000
+LEARNING_RATE = 0.0001
+BN
+The Best Epoch: 37368  |  The Best Validation Error: 20.259865
+Test Loss
+MSE: 9897.200195
+MAE: 50.500713
+
+
+
+
+
+
+
+
+
+
+
+

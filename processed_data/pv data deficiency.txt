@@ -1,0 +1,121 @@
+2021 PV data
+학사과정, 다산빌딩 데이터 누락. 3.10~6.22
+
+
+
+okay 210130
+okay 210227
+missing data! / month: %d, date: %d 3 10
+missing data! / month: %d, date: %d 3 11
+missing data! / month: %d, date: %d 3 12
+missing data! / month: %d, date: %d 3 13
+missing data! / month: %d, date: %d 3 14
+missing data! / month: %d, date: %d 3 15
+missing data! / month: %d, date: %d 3 16
+missing data! / month: %d, date: %d 3 17
+missing data! / month: %d, date: %d 3 18
+missing data! / month: %d, date: %d 3 19
+missing data! / month: %d, date: %d 3 20
+missing data! / month: %d, date: %d 3 21
+missing data! / month: %d, date: %d 3 22
+missing data! / month: %d, date: %d 3 23
+missing data! / month: %d, date: %d 3 24
+missing data! / month: %d, date: %d 3 25
+missing data! / month: %d, date: %d 3 26
+missing data! / month: %d, date: %d 3 27
+missing data! / month: %d, date: %d 3 28
+missing data! / month: %d, date: %d 3 29
+missing data! / month: %d, date: %d 3 30
+okay 210330
+missing data! / month: %d, date: %d 4 1
+missing data! / month: %d, date: %d 4 2
+missing data! / month: %d, date: %d 4 3
+missing data! / month: %d, date: %d 4 4
+missing data! / month: %d, date: %d 4 5
+missing data! / month: %d, date: %d 4 6
+missing data! / month: %d, date: %d 4 7
+missing data! / month: %d, date: %d 4 8
+missing data! / month: %d, date: %d 4 9
+missing data! / month: %d, date: %d 4 10
+missing data! / month: %d, date: %d 4 11
+missing data! / month: %d, date: %d 4 12
+missing data! / month: %d, date: %d 4 13
+missing data! / month: %d, date: %d 4 14
+missing data! / month: %d, date: %d 4 15
+missing data! / month: %d, date: %d 4 16
+missing data! / month: %d, date: %d 4 17
+missing data! / month: %d, date: %d 4 18
+missing data! / month: %d, date: %d 4 19
+missing data! / month: %d, date: %d 4 20
+missing data! / month: %d, date: %d 4 21
+missing data! / month: %d, date: %d 4 22
+missing data! / month: %d, date: %d 4 23
+missing data! / month: %d, date: %d 4 24
+missing data! / month: %d, date: %d 4 25
+missing data! / month: %d, date: %d 4 26
+missing data! / month: %d, date: %d 4 27
+missing data! / month: %d, date: %d 4 28
+missing data! / month: %d, date: %d 4 29
+okay 210429
+missing data! / month: %d, date: %d 5 1
+missing data! / month: %d, date: %d 5 2
+missing data! / month: %d, date: %d 5 3
+missing data! / month: %d, date: %d 5 4
+missing data! / month: %d, date: %d 5 5
+missing data! / month: %d, date: %d 5 6
+missing data! / month: %d, date: %d 5 7
+missing data! / month: %d, date: %d 5 8
+missing data! / month: %d, date: %d 5 9
+missing data! / month: %d, date: %d 5 10
+missing data! / month: %d, date: %d 5 11
+missing data! / month: %d, date: %d 5 12
+missing data! / month: %d, date: %d 5 13
+missing data! / month: %d, date: %d 5 14
+missing data! / month: %d, date: %d 5 15
+missing data! / month: %d, date: %d 5 16
+missing data! / month: %d, date: %d 5 17
+missing data! / month: %d, date: %d 5 18
+missing data! / month: %d, date: %d 5 19
+missing data! / month: %d, date: %d 5 20
+missing data! / month: %d, date: %d 5 21
+missing data! / month: %d, date: %d 5 22
+missing data! / month: %d, date: %d 5 23
+missing data! / month: %d, date: %d 5 24
+missing data! / month: %d, date: %d 5 25
+missing data! / month: %d, date: %d 5 26
+missing data! / month: %d, date: %d 5 27
+missing data! / month: %d, date: %d 5 28
+missing data! / month: %d, date: %d 5 29
+missing data! / month: %d, date: %d 5 30
+okay 210530
+missing data! / month: %d, date: %d 6 1
+missing data! / month: %d, date: %d 6 2
+missing data! / month: %d, date: %d 6 3
+missing data! / month: %d, date: %d 6 4
+missing data! / month: %d, date: %d 6 5
+missing data! / month: %d, date: %d 6 6
+missing data! / month: %d, date: %d 6 7
+missing data! / month: %d, date: %d 6 8
+missing data! / month: %d, date: %d 6 9
+missing data! / month: %d, date: %d 6 10
+missing data! / month: %d, date: %d 6 11
+missing data! / month: %d, date: %d 6 12
+missing data! / month: %d, date: %d 6 13
+missing data! / month: %d, date: %d 6 14
+missing data! / month: %d, date: %d 6 15
+missing data! / month: %d, date: %d 6 16
+missing data! / month: %d, date: %d 6 17
+missing data! / month: %d, date: %d 6 18
+missing data! / month: %d, date: %d 6 19
+missing data! / month: %d, date: %d 6 20
+missing data! / month: %d, date: %d 6 21
+missing data! / month: %d, date: %d 6 22
+okay 210629
+okay 210730
+okay 210830
+okay 210929
+okay 211030
+okay 211129
+missing data! / month: %d, date: %d 12 22
+missing data! / month: %d, date: %d 12 23
+okay 211230
