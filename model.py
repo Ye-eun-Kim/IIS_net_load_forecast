@@ -231,13 +231,14 @@ mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini
 
 
 # load plotting
-label_interval = [31,28,31,30,31,30,31,31,30,31,30,31]
 now = datetime.datetime.now()
 timestamp = now.strftime("%Y%m%d_%H%M%S")
 if basic_path == "./processed_data/RISE_2021_load.csv":
     file = 'everyday'
+    label_interval = [31,28,31,30,31,30,31,31,30,31,30,31]
 elif basic_path == "./processed_data/week_2021_load.csv":
     file = 'week'
+    label_interval = [18, 17, 22, 21, 19, 15, 22, 21, 21, 19, 21, 18]
 file_name = f'{model_case}_{num_of_features}_{file}_{timestamp}'
 plot_daily_load(X, label_interval, (20,5), "Daily Load Sum in 2021", 15, mini_train_size-1, train_size-1,"./plots/daily_load/"+file_name+'.png')
 

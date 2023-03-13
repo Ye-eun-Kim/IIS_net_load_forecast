@@ -1,4 +1,5 @@
-# Process pv data without missing data by interpolation
+# Process pv data without interpolation
+# 210101~211231 but 211222~211224 excluded
 
 
 import pandas as pd
@@ -6,7 +7,8 @@ import numpy as np
 
 
 # import calendar file
-cal = pd.read_excel('./processed_data/2021_cal_flag.xlsx', index_col=0, header=0)
+cal = pd.read_excel('./processed_data/2021_cal_flag.xlsx',
+                    index_col=0, header=0)
 
 # extract and combine needed colums from net load excel files into one dataframe temp and then divide them into week and weekend
 basic_path = './preprocessed_data/netload_forecasting/GIST energy data/2021 PV/태양광 일보.gcf_2021-'
@@ -37,18 +39,13 @@ for month in range(1, 13):
             # exclude missing data
             temp = pd.read_excel(file_path,  header=[3, 4, 5]).iloc[0:24, [26]]
         except FileNotFoundError:
-            # linear interpolation to fill missing data
-            # read data as NaN for missing data
-            temp = pd.DataFrame(index=range(24), columns=[date]).astype(float)
-            temp[:] = np.nan
-            print('missing data! / month: ', month, ' date: ', day)
-            # continue
+            print('FileNotFoundError! / month: ', month, ' date: ', day)
+            continue
 
         if date == '211224':   # check if the date is 211224(updated on 23.02.24)
-            temp = pd.DataFrame(index=range(24), columns=[date]).astype(float)
-            temp[:] = np.nan
             print('missing data! / month: ', month, ' date: ', day)
-                
+            continue
+        
         temp.reindex(range(24))
         temp.columns = [date]
 
@@ -59,15 +56,10 @@ for month in range(1, 13):
 
     print('This month is finished. ', date)
     
-            
+
 # perform linear interpolation
 df = df.transpose()
 df.index = pd.to_numeric(df.index)
-df = df.interpolate(method='akima', axis=0)
+print(df.index)
 
-# change negative value to 0 in df because the interpolated values are not all positive or zero
-df[df < 0] = 0
-# restrict the number of decimal places to 2
-df = df.round(1)
-
-df.to_csv("./processed_data/pv/RISE_2021_PV.csv")
+df.to_csv("./processed_data/pv/RISE_2021_PV_no_interpol.csv")
