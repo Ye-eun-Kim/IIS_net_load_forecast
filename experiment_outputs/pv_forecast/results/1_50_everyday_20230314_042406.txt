@@ -1,0 +1,19 @@
+Train Epoch:    0/5000  |  Train Loss 378.926910  |  Val Loss 254.091812
+Train Epoch:  500/5000  |  Train Loss 21.500000  |  Val Loss 58.640209
+Train Epoch: 1000/5000  |  Train Loss 11.131701  |  Val Loss 68.681702
+Train Epoch: 1500/5000  |  Train Loss 5.965057  |  Val Loss 73.431549
+Train Epoch: 2000/5000  |  Train Loss 2.988418  |  Val Loss 77.124733
+Train Epoch: 2500/5000  |  Train Loss 1.529834  |  Val Loss 81.075142
+Train Epoch: 3000/5000  |  Train Loss 0.824939  |  Val Loss 84.648003
+Train Epoch: 3500/5000  |  Train Loss 0.461625  |  Val Loss 88.284187
+Train Epoch: 4000/5000  |  Train Loss 0.244844  |  Val Loss 90.597679
+Train Epoch: 4500/5000  |  Train Loss 0.159926  |  Val Loss 90.530502
+--------------------------------------------------------------------------------
+The Best Epoch: 150  |  The Best Validation Error: 52.613129
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/150  |  Train Loss 19.132046
+Test Loss
+MSE: 77.602966
+MAE: 4.559999
+MAPE(%): 27900578.000000

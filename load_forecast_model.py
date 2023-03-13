@@ -1,14 +1,14 @@
 # Need two additional arguments: case, num_of_features, basic_path
 # ex.
-# python model.py 1 25 "./processed_data/RISE_2021_load.csv"
-# python model.py 1 24 ?
+# python load_forecast_model.py 1 25 "./processed_data/RISE_2021_load.csv"
+# python load_forecast_model.py 1 24 "./processed_data/week_2021_load.csv"
 
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from torchmetrics import MeanAbsolutePercentageError as MAPE
 import numpy as np
 import pandas as pd
@@ -32,27 +32,28 @@ class Net(nn.Module):
     def __init__(self, num_of_features, **model_config):
         super(Net, self).__init__()
         self.fc1 = nn.Linear(num_of_features, 64)
+        self.model_type = model_config['case']
         if model_config['case'] == 1 or model_config['case'] == 2:
             self.hidden_dim = 512
         elif model_config['case'] == 3 or model_config['case'] == 4:
             self.hidden_dim = 1024
         self.fc2 = nn.Linear(64, self.hidden_dim)
-        self.fc3 = nn.Linear(self.hidden_dim, num_of_features)
+        self.fc3 = nn.Linear(self.hidden_dim, 24)
         self.relu = nn.ReLU()
         self.batch_norm1 = nn.BatchNorm1d(64)
         self.batch_norm2 = nn.BatchNorm1d(self.hidden_dim)
     
     def forward(self, x):
         x = self.fc1(x)
-        if model_config['case'] == 1 or model_config['case'] == 3:
+        if self.model_type == 1 or self.model_type == 3:
             pass
-        elif model_config['case'] == 2 or model_config['case'] == 4:
+        elif self.model_type == 2 or self.model_type == 4:
             x = self.batch_norm1(x)
         x = self.relu(x)
         x = self.fc2(x)
-        if model_config['case'] == 1 or model_config['case'] == 3:
+        if self.model_type == 1 or self.model_type == 3:
             pass
-        elif model_config['case'] == 2 or model_config['case'] == 4:
+        elif self.model_type == 2 or self.model_type == 4:
             x = self.batch_norm2(x)
         x = self.relu(x)
         output = self.fc3(x)
@@ -220,6 +221,7 @@ mape = MAPE()
 
 # data loading
 # X: 210101-211230, Y: 210102-211231 / 364*25 (24h+1flag)
+# X: 210104-211229, Y: 210105-211230 / 234x24 (24h)
 X, Y = load_data(basic_path, num_of_features)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
@@ -228,9 +230,15 @@ mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini
 # 59개    210821 ~ 211018
 # 291개   210101 ~ 211018
 # 73개    211019 ~ 211230
+# --------------------------------------------------
+# 148개   210104 ~ 210819
+# 38개    210820 ~ 211015
+# 186개   210104 ~ 211015
+# 47개    211018 ~ 211229
 
 
 # load plotting
+dir = './experiment_outputs/load_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%Y%m%d_%H%M%S")
 if basic_path == "./processed_data/RISE_2021_load.csv":
@@ -240,7 +248,7 @@ elif basic_path == "./processed_data/week_2021_load.csv":
     file = 'week'
     label_interval = [18, 17, 22, 21, 19, 15, 22, 21, 21, 19, 21, 18]
 file_name = f'{model_case}_{num_of_features}_{file}_{timestamp}'
-plot_daily_load(X, label_interval, (20,5), "Daily Load Sum in 2021", 15, mini_train_size-1, train_size-1,"./plots/daily_load/"+file_name+'.png')
+plot_daily_load(X, label_interval, (20,5), "Daily Load Sum in 2021", 15, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
 # model setting
@@ -252,7 +260,7 @@ criterion2 = nn.MSELoss(reduction = 'mean').to(DEVICE)
 
 
 # file to save the results
-f = open(f"./results/{file_name}.txt", 'w')
+f = open(dir+f"results/{file_name}.txt", 'w')
 
 
 # model training and validation
@@ -280,7 +288,7 @@ print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_va
 print('-'*80, file = f)
 print('-'*80, file = f)
 
-plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = f'./plots/loss/{file_name}.png')
+plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
 
 
 
@@ -305,10 +313,10 @@ print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
 
 
 
-plot(1, 20, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 20 days', 18, f'./plots/forecasted_load/{file_name}.png')
+plot(1, 20, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 20 days', 18, dir+f'plots/forecasted_load/{file_name}.png')
 
 
 
 f.close()
 
-torch.save(model.state_dict(), f'./models/{file_name}.pt')
+torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
