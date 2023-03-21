@@ -47,21 +47,25 @@ BATCH_SIZE = 16
 class Net(nn.Module):
     def __init__(self, col_len, **model_config):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(col_len, 64)
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidden_dim = 128
+            self.hidd_dim = 75
+            self.hidden_dim = 225
         elif model_config['case'] == 2:
-            self.hidden_dim = 256
+            self.hidd_dim = 100
+            self.hidden_dim = 300
         elif model_config['case'] == 3:
-            self.hidden_dim = 512
+            self.hidd_dim = 64
+            self.hidden_dim = 256
         elif model_config['case'] == 4:
-            self.hidden_dim = 1024
-        self.fc2 = nn.Linear(64, self.hidden_dim)
+            self.hidd_dim = 250
+            self.hidden_dim = 75
+            
+        self.fc1 = nn.Linear(col_len, self.hidd_dim)
+        self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
         self.fc3 = nn.Linear(self.hidden_dim, 24)
         self.relu = nn.ReLU()
-        self.batch_norm1 = nn.BatchNorm1d(64)
-        self.batch_norm2 = nn.BatchNorm1d(self.hidden_dim)
+
     
     def forward(self, x):
         x = self.fc1(x)
@@ -70,48 +74,6 @@ class Net(nn.Module):
         x = self.relu(x)
         output = self.fc3(x)
         return output
-
-
-# class Net(nn.Module):
-#     def __init__(self, col_len, **model_config):
-#         super(Net, self).__init__()
-        
-#         self.model_type = model_config['case']
-#         if model_config['case'] == 1:
-#             self.fc1 = nn.Linear(col_len, 64)
-#             self.hidden_dim = 256
-#             self.fc2 = nn.Linear(64, self.hidden_dim)
-#             self.fc3 = nn.Linear(self.hidden_dim, 24)
-#         elif model_config['case'] == 2:
-#             self.hidden_dim = int(col_len*0.5)
-#             self.fc1 = nn.Linear(col_len, self.hidden_dim)
-#             self.fc2 = nn.Linear(self.hidden_dim, self.hidden_dim)
-#             self.fc3 = nn.Linear(self.hidden_dim, 24)
-#         elif model_config['case'] == 3:
-#             self.hidden_dim = int(col_len*0.3)
-#             self.fc1 = nn.Linear(col_len, self.hidden_dim)
-#             self.fc2 = nn.Linear(self.hidden_dim, self.hidden_dim)
-#             self.fc3 = nn.Linear(self.hidden_dim, 24)
-#         elif model_config['case'] == 4:
-#             self.hidden_dim = int(col_len*0.3)
-#             self.fc1 = nn.Linear(col_len, self.hidden_dim)
-#             self.fc2 = nn.Linear(self.hidden_dim, 24)
-#         self.relu = nn.ReLU()
-    
-    def forward(self, x):
-        model_type = self.model_type
-        if model_type == 4:
-            x = self.fc1(x)
-            x = self.relu(x)
-            output = self.fc2(x)
-            return output
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-        x = self.relu(x)
-        output = self.fc3(x)
-        return output
-
 
 
 
@@ -130,7 +92,7 @@ def set_seed(seed):
 def load_data(drop_features):
     X_pv = pd.read_csv('./processed_data/pv/X_pv.csv', index_col=0)
     Y_pv = pd.read_csv('./processed_data/pv/Y_pv.csv', index_col=0)
-    if len(sys.argv) == 4:
+    if drop_features != 'No_drop':
         X = X_pv.drop(columns = drop_features)
     else:
         X = X_pv
@@ -326,8 +288,8 @@ def evaluate(model, valid_dataloader):
 
 set_seed(RANDOM_SEED)
 model_case = int(sys.argv[1])
-if len(sys.argv) == 4:
-    drop_features = sys.argv[3].split(',')
+if len(sys.argv) == 3:
+    drop_features = sys.argv[2].split(',')
 else:
     drop_features = 'No_drop'
 mae = nn.L1Loss()
@@ -406,7 +368,7 @@ print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_va
 print('-'*80, file = f)
 print('-'*80, file = f)
 
-plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch = best_val_epoch+10, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
+plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch = best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
 
 
 

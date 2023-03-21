@@ -1,0 +1,8 @@
+Train Epoch:    0/50000  |  Train Loss 874459.750000  |  Val Loss 965416.562500
+Train Epoch:  500/50000  |  Train Loss 825502.187500  |  Val Loss 912131.875000
+Train Epoch: 1000/50000  |  Train Loss 775361.812500  |  Val Loss 857477.125000
+Train Epoch: 1500/50000  |  Train Loss 726504.250000  |  Val Loss 804388.375000
+Train Epoch: 2000/50000  |  Train Loss 677098.687500  |  Val Loss 750569.687500
+Train Epoch: 2500/50000  |  Train Loss 622817.312500  |  Val Loss 691319.000000
+Train Epoch: 3000/50000  |  Train Loss 563184.437500  |  Val Loss 626165.687500
+Train Epoch: 3500/50000  |  Train Loss 499946.375000  |  Val Loss 556962.875000
