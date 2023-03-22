@@ -108,7 +108,7 @@ def plot_daily_load(X, label_interval, fig_size, title, font_size, mini_train_po
 
     plt.title(title, fontsize = font_size)
     plt.xlabel('Month', fontsize = font_size)
-    plt.ylabel('Daily load sum', fontsize = font_size)
+    plt.ylabel('Daily load sum (kWh)', fontsize = font_size)
 
     # Set the x-tick positions and labels
     x_ticks = []
