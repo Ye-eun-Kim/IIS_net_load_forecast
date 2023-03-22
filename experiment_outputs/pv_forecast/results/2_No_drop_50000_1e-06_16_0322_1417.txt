@@ -1,0 +1,43 @@
+Train Epoch:    0/50000  |  Train Loss 390.195312  |  Val Loss 275.785339
+Train Epoch:  500/50000  |  Train Loss 212.850662  |  Val Loss 150.531708
+Train Epoch: 1000/50000  |  Train Loss 111.007133  |  Val Loss 96.626648
+Train Epoch: 1500/50000  |  Train Loss 89.591728  |  Val Loss 87.825996
+Train Epoch: 2000/50000  |  Train Loss 80.623512  |  Val Loss 80.443542
+Train Epoch: 2500/50000  |  Train Loss 74.654282  |  Val Loss 75.443481
+Train Epoch: 3000/50000  |  Train Loss 69.787697  |  Val Loss 71.911766
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Train Epoch: 3500/50000  |  Train Loss 65.374123  |  Val Loss 69.425514
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Train Epoch: 4000/50000  |  Train Loss 61.248455  |  Val Loss 67.717239
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 4043  |  The Best Validation Error: 67.587967
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/4043  |  Train Loss 62.227707
+Train Epoch:  500/4043  |  Train Loss 57.857166
+Train Epoch: 1000/4043  |  Train Loss 54.104786
+Train Epoch: 1500/4043  |  Train Loss 50.812054
+Train Epoch: 2000/4043  |  Train Loss 47.882816
+Train Epoch: 2500/4043  |  Train Loss 45.255878
+Train Epoch: 3000/4043  |  Train Loss 42.947163
+Train Epoch: 3500/4043  |  Train Loss 40.929409
+Train Epoch: 4000/4043  |  Train Loss 39.169613
+Test Loss
+MSE: 38.185520
+MAE: 3.172273

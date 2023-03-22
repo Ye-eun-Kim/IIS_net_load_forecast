@@ -33,14 +33,14 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidd_dim = 36
-            self.hidden_dim = 108
+            self.hidd_dim = 256   # good
+            self.hidden_dim = 36
         elif model_config['case'] == 2:
-            self.hidd_dim = 48
-            self.hidden_dim = 144
+            self.hidd_dim = 240
+            self.hidden_dim = 36
         elif model_config['case'] == 3:
-            self.hidd_dim = 32
-            self.hidden_dim = 128
+            self.hidd_dim = 240
+            self.hidden_dim = 72
         elif model_config['case'] == 4:
             self.hidd_dim = 120
             self.hidden_dim = 36
@@ -74,9 +74,10 @@ def set_seed(seed):
 def load_data():
     X_load = pd.read_csv('./processed_data/load/X_load.csv', index_col=0)
     Y_load = pd.read_csv('./processed_data/load/Y_load.csv', index_col=0)
+    label_interval = get_label_interval(X_load)
     X = torch.FloatTensor(X_load.values)
     Y = torch.FloatTensor(Y_load.values)
-    return X, Y
+    return X, Y, label_interval
 
 
 # split data into mini_train, valid, train, test
@@ -94,6 +95,18 @@ def split_data(X, Y, batch_size, data_len, train_pie, mini_train_pie):
     test_dataloader = DataLoader(test_data, batch_size = len(test_data), shuffle = False)
     
     return mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size
+
+
+# get the number of days of each month as label_interval list
+def get_label_interval(X):
+    label_interval = []
+    for i in range(1, 13):
+        cnt = 0
+        for idx in X.index:
+            if '21{0:0>2}'.format(i) in str(idx):
+                cnt+=1
+        label_interval.append(cnt)
+
 
 
 # plot a daily load sum graph
@@ -216,25 +229,24 @@ mape = MAPE()
 
 
 # data loading
-# X: 210104-211229, Y: 210105-211230 / 175*50
-X, Y = load_data()
+# X: 210104-211229, Y: 210105-211230 / 173*50
+X, Y, label_interval = load_data()
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
-# 112개   210104 ~ 210818
-# 28개    210819 ~ 211018
-# 140개   210104 ~ 211018
-# 35개    211019 ~ 211229
+# 110개   210104 ~ 210816
+# 28개    210817 ~ 211013
+# 138개   210104 ~ 211013
+# 35개    211014 ~ 211229
 
 
 # load plotting
 dir = './experiment_outputs/load_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
-label_interval = [13, 13, 17, 16, 14, 11, 17, 16, 16, 13, 16, 13]
 
 file_name = f'{model_case}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
-plot_daily_load(X, label_interval, (10,2.5), "Daily Load Sum in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+plot_daily_load(X, label_interval, (10,4), "Daily Load Sum in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
 # model setting

@@ -32,6 +32,8 @@ for i in range(observation_weather_len):
 observation_weather.index = mdi_observation_weather_date_list
 forecast_weather.index = mdi_observation_weather_date_list
 
+# rename the column name of forecast_weather from 'SK_5' to 'SK_15'
+forecast_weather = forecast_weather.rename(columns={'SK_5':'SK_15'})
 
 # concat pv, observation_weather, forecast_weather
 comb = pd.concat([pv, observation_weather, forecast_weather], axis=1, join='outer')
@@ -39,7 +41,7 @@ comb = pd.concat([pv, observation_weather, forecast_weather], axis=1, join='oute
 #  PV generation each hour
 #  'DS', 'SL', 'SR'
 #  'TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18', 'WS_6', 'WS_9', 'WS_12', 'WS_15', 'WS_18',
-#  'SK_6', 'SK_9', 'SK_12', 'SK_5', 'SK_18', 'PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18',
+#  'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18', 'PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18',
 #  'PR_9', 'PR_15', 'PR_21'
 
 # sort the index of comb

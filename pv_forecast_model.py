@@ -9,7 +9,7 @@
 # python pv_forecast_model.py 1 PP_6,PP_9,PP_12,PP_15,PP_18 -- X
 # python pv_forecast_model.py 1 TM_6,TM_9,TM_12,TM_15,TM_18 -- X
 # python pv_forecast_model.py 1 WS_6,WS_9,WS_12,WS_15,WS_18 -- X
-# python pv_forecast_model.py 1 SK_6,SK_9,SK_12,SK_5,SK_18 -- X
+# python pv_forecast_model.py 1 SK_6,SK_9,SK_12,SK_15,SK_18 -- X
 # python pv_forecast_model.py 1 DS -- X
 # python pv_forecast_model.py 1 SL -- X
 # python pv_forecast_model.py 1 SR -- X
@@ -21,7 +21,7 @@
 ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
 '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', 'DS',
 'SL', 'SR', 'TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18', 'WS_6', 'WS_9',
-'WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_5', 'SK_18',
+'WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18',
 'PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21']
 '''
 
@@ -60,14 +60,14 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidd_dim = int(col_len*5)
-            self.hidden_dim = int(col_len*0.3)
-        # elif model_config['case'] == 2:
-        #     self.hidd_dim = 100
-        #     self.hidden_dim = 300
-        # elif model_config['case'] == 3:
-        #     self.hidd_dim = 64
-        #     self.hidden_dim = 256
+            self.hidd_dim = 512
+            self.hidden_dim = 75
+        elif model_config['case'] == 2:
+            self.hidd_dim = int(col_len*10)
+            self.hidden_dim = int(col_len*10*0.2*0.3)
+        elif model_config['case'] == 3:
+            self.hidd_dim = 500
+            self.hidden_dim = 75  #good
         elif model_config['case'] == 4:
             self.hidd_dim = 250
             self.hidden_dim = 75
@@ -175,7 +175,7 @@ def plot_daily_feature(X, label_interval, col_list, fig_size, font_size, mini_tr
             # column: wind speed of 15h on next day
             data = X[:,idx]
             unit = 'm/s'
-        elif 'SK_5' in col:
+        elif 'SK_15' in col:
             # column: state of sky of 15h on next day
             data = X[:,idx]
             col = 'SK_15'
@@ -326,7 +326,7 @@ mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini
 dir = './experiment_outputs/pv_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
-label_interval = [13, 13, 17, 16, 14, 11, 17, 16, 16, 13, 16, 13]
+label_interval = [13, 13, 17, 16, 14, 11, 17, 16, 16, 13, 14, 13]
 
 file_name = f'{model_case}_{drop_features}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
 _path = dir+"plots/daily_pv_features/"+file_name
