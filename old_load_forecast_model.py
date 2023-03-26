@@ -263,7 +263,7 @@ def calculate_loss(test_output, test_y, hor, mse, mae, mape, f):
     print('MSE: {:.6f}'.format(test_mse), file = f)
     print('MAE: {:.6f}'.format(test_mae), file = f)
     print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
-    plot(1, 20, test_output, test_y, (20, 5), 'Actual and forecast load for 20 days', 18, dir+f'plots/forecasted_load/{hor_ver}_{file_name}.png')
+    plot(0, 8, test_output, test_y, (20, 5), 'Actual and forecast load for 20 days', 18, dir+f'plots/forecasted_load/{hor_ver}_{file_name}.png')
 
 
 

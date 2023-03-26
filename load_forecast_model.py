@@ -36,8 +36,9 @@ class Net(nn.Module):
             self.hidd_dim = 256   # good
             self.hidden_dim = 36
         elif model_config['case'] == 2:
-            self.hidd_dim = 240
-            self.hidden_dim = 36
+            self.hidd_dim = 1024
+            self.hidden_dim = 8192
+            self.hidden_dimm = 144
         elif model_config['case'] == 3:
             self.hidd_dim = 240
             self.hidden_dim = 72
@@ -47,7 +48,9 @@ class Net(nn.Module):
             
         self.fc1 = nn.Linear(num_of_features, self.hidd_dim)
         self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
-        self.fc3 = nn.Linear(self.hidden_dim, 24)
+        # self.fc3 = nn.Linear(self.hidden_dim, 24)
+        self.fc3 = nn.Linear(self.hidden_dim, self.hidden_dimm)
+        self.fc4 = nn.Linear(self.hidden_dimm, 24)
         self.relu = nn.ReLU()
     
     def forward(self, x):
@@ -55,7 +58,10 @@ class Net(nn.Module):
         x = self.relu(x)
         x = self.fc2(x)
         x = self.relu(x)
-        output = self.fc3(x)
+        # output = self.fc3(x)
+        x = self.fc3(x)
+        x = self.relu(x)
+        output = self.fc4(x)
         return output
     
 

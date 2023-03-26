@@ -6,13 +6,13 @@
 # Need two additional arguments: case, drop_features(list)
 # ex.
 # python pv_forecast_model.py 1 PR_9,PR_15,PR_21 -- X
-# python pv_forecast_model.py 1 PP_6,PP_9,PP_12,PP_15,PP_18 -- X
-# python pv_forecast_model.py 1 TM_6,TM_9,TM_12,TM_15,TM_18 -- X
-# python pv_forecast_model.py 1 WS_6,WS_9,WS_12,WS_15,WS_18 -- X
-# python pv_forecast_model.py 1 SK_6,SK_9,SK_12,SK_15,SK_18 -- X
-# python pv_forecast_model.py 1 DS -- X
-# python pv_forecast_model.py 1 SL -- X
-# python pv_forecast_model.py 1 SR -- X
+# python pv_forecast_model.py 2 PP_6,PP_9,PP_12,PP_15,PP_18 -- X
+# python pv_forecast_model.py 2 TM_6,TM_9,TM_12,TM_15,TM_18 -- X
+# python pv_forecast_model.py 2 WS_6,WS_9,WS_12,WS_15,WS_18 -- X
+# python pv_forecast_model.py 2 SK_6,SK_9,SK_12,SK_15,SK_18 -- X
+# python pv_forecast_model.py 2 DS -- X
+# python pv_forecast_model.py 2 SL -- X
+# python pv_forecast_model.py 2 SR -- X
 
 # python pv_forecast_model.py 1
 
@@ -413,7 +413,7 @@ print('MAE: {:.6f}'.format(test_mae), file = f)
 
 
 
-plot(1, 20, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast PV for 20 days', 18, dir+f'plots/forecasted_pv/{file_name}.png')
+plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast PV for 20 days', 18, dir+f'plots/forecasted_pv/{file_name}.png')
 
 
 
