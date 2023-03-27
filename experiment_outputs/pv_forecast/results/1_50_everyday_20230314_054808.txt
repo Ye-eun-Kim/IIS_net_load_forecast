@@ -1,0 +1,88 @@
+Train Epoch:    0/20000  |  Train Loss 387.780731  |  Val Loss 271.210388
+Train Epoch:  500/20000  |  Train Loss 272.101685  |  Val Loss 185.810837
+Train Epoch: 1000/20000  |  Train Loss 158.552750  |  Val Loss 114.666656
+Train Epoch: 1500/20000  |  Train Loss 108.574379  |  Val Loss 96.567955
+Train Epoch: 2000/20000  |  Train Loss 95.526855  |  Val Loss 89.307793
+Train Epoch: 2500/20000  |  Train Loss 88.019325  |  Val Loss 81.526749
+Train Epoch: 3000/20000  |  Train Loss 82.991402  |  Val Loss 76.052826
+Train Epoch: 3500/20000  |  Train Loss 79.314323  |  Val Loss 72.356926
+Train Epoch: 4000/20000  |  Train Loss 76.171471  |  Val Loss 69.575287
+Train Epoch: 4500/20000  |  Train Loss 73.225304  |  Val Loss 67.279175
+Train Epoch: 5000/20000  |  Train Loss 70.273033  |  Val Loss 65.250046
+Train Epoch: 5500/20000  |  Train Loss 67.290276  |  Val Loss 63.320431
+Train Epoch: 6000/20000  |  Train Loss 64.287514  |  Val Loss 61.584686
+Train Epoch: 6500/20000  |  Train Loss 61.326954  |  Val Loss 60.037682
+Train Epoch: 7000/20000  |  Train Loss 58.463810  |  Val Loss 58.651466
+Train Epoch: 7500/20000  |  Train Loss 55.691807  |  Val Loss 57.509239
+Train Epoch: 8000/20000  |  Train Loss 53.130421  |  Val Loss 56.670967
+Train Epoch: 8500/20000  |  Train Loss 50.804432  |  Val Loss 56.080173
+Train Epoch: 9000/20000  |  Train Loss 48.731781  |  Val Loss 55.637375
+Train Epoch: 9500/20000  |  Train Loss 46.951717  |  Val Loss 55.284683
+Train Epoch: 10000/20000  |  Train Loss 45.421383  |  Val Loss 54.988270
+Train Epoch: 10500/20000  |  Train Loss 44.126888  |  Val Loss 54.843273
+Train Epoch: 11000/20000  |  Train Loss 43.022144  |  Val Loss 54.755466
+Train Epoch: 11500/20000  |  Train Loss 42.067429  |  Val Loss 54.665577
+Train Epoch: 12000/20000  |  Train Loss 41.235096  |  Val Loss 54.537704
+Train Epoch: 12500/20000  |  Train Loss 40.498257  |  Val Loss 54.412750
+Train Epoch: 13000/20000  |  Train Loss 39.838055  |  Val Loss 54.282646
+Train Epoch: 13500/20000  |  Train Loss 39.244450  |  Val Loss 54.097275
+Train Epoch: 14000/20000  |  Train Loss 38.691288  |  Val Loss 53.923805
+Train Epoch: 14500/20000  |  Train Loss 38.175026  |  Val Loss 53.754379
+Train Epoch: 15000/20000  |  Train Loss 37.684158  |  Val Loss 53.630348
+Train Epoch: 15500/20000  |  Train Loss 37.224789  |  Val Loss 53.527252
+Train Epoch: 16000/20000  |  Train Loss 36.792263  |  Val Loss 53.448231
+Train Epoch: 16500/20000  |  Train Loss 36.375008  |  Val Loss 53.360950
+Train Epoch: 17000/20000  |  Train Loss 35.972416  |  Val Loss 53.293468
+Train Epoch: 17500/20000  |  Train Loss 35.590263  |  Val Loss 53.199551
+Train Epoch: 18000/20000  |  Train Loss 35.214344  |  Val Loss 53.145916
+Train Epoch: 18500/20000  |  Train Loss 34.852928  |  Val Loss 53.100040
+Train Epoch: 19000/20000  |  Train Loss 34.507050  |  Val Loss 53.055317
+Train Epoch: 19500/20000  |  Train Loss 34.173103  |  Val Loss 53.035992
+--------------------------------------------------------------------------------
+The Best Epoch: 19894  |  The Best Validation Error: 52.998249
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/19894  |  Train Loss 37.718193
+Train Epoch:  500/19894  |  Train Loss 36.851643
+Train Epoch: 1000/19894  |  Train Loss 36.362118
+Train Epoch: 1500/19894  |  Train Loss 35.936710
+Train Epoch: 2000/19894  |  Train Loss 35.547878
+Train Epoch: 2500/19894  |  Train Loss 35.184990
+Train Epoch: 3000/19894  |  Train Loss 34.844517
+Train Epoch: 3500/19894  |  Train Loss 34.511845
+Train Epoch: 4000/19894  |  Train Loss 34.198498
+Train Epoch: 4500/19894  |  Train Loss 33.906193
+Train Epoch: 5000/19894  |  Train Loss 33.627186
+Train Epoch: 5500/19894  |  Train Loss 33.359623
+Train Epoch: 6000/19894  |  Train Loss 33.103085
+Train Epoch: 6500/19894  |  Train Loss 32.857479
+Train Epoch: 7000/19894  |  Train Loss 32.621841
+Train Epoch: 7500/19894  |  Train Loss 32.389141
+Train Epoch: 8000/19894  |  Train Loss 32.161037
+Train Epoch: 8500/19894  |  Train Loss 31.938850
+Train Epoch: 9000/19894  |  Train Loss 31.720728
+Train Epoch: 9500/19894  |  Train Loss 31.508307
+Train Epoch: 10000/19894  |  Train Loss 31.301710
+Train Epoch: 10500/19894  |  Train Loss 31.096298
+Train Epoch: 11000/19894  |  Train Loss 30.897062
+Train Epoch: 11500/19894  |  Train Loss 30.697618
+Train Epoch: 12000/19894  |  Train Loss 30.502047
+Train Epoch: 12500/19894  |  Train Loss 30.306337
+Train Epoch: 13000/19894  |  Train Loss 30.111319
+Train Epoch: 13500/19894  |  Train Loss 29.922792
+Train Epoch: 14000/19894  |  Train Loss 29.737259
+Train Epoch: 14500/19894  |  Train Loss 29.553085
+Train Epoch: 15000/19894  |  Train Loss 29.374044
+Train Epoch: 15500/19894  |  Train Loss 29.198477
+Train Epoch: 16000/19894  |  Train Loss 29.024092
+Train Epoch: 16500/19894  |  Train Loss 28.851404
+Train Epoch: 17000/19894  |  Train Loss 28.680555
+Train Epoch: 17500/19894  |  Train Loss 28.511408
+Train Epoch: 18000/19894  |  Train Loss 28.345736
+Train Epoch: 18500/19894  |  Train Loss 28.180899
+Train Epoch: 19000/19894  |  Train Loss 28.018709
+Train Epoch: 19500/19894  |  Train Loss 27.858887
+Test Loss
+MSE: 50.228745
+MAE: 3.529708
+MAPE(%): 13435677.000000

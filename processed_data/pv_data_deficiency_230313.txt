@@ -1,0 +1,19 @@
+pv_data_decipiencies(interpolated)
+: 210101~211231(akima spline)
+
+
+This month is finished.  210131
+This month is finished.  210228
+This month is finished.  210331
+This month is finished.  210430
+This month is finished.  210531
+This month is finished.  210630
+This month is finished.  210731
+This month is finished.  210831
+This month is finished.  210930
+This month is finished.  211031
+This month is finished.  211130
+missing data! / month:  12  date:  22
+missing data! / month:  12  date:  23
+missing data! / month:  12  date:  24      -> 00~11 같은 값 반복
+This month is finished.  211231

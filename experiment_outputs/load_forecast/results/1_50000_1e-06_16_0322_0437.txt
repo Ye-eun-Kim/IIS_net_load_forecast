@@ -1,0 +1,37 @@
+Train Epoch:    0/50000  |  Train Loss 874414.812500  |  Val Loss 965331.875000
+Train Epoch:  500/50000  |  Train Loss 785667.312500  |  Val Loss 868666.500000
+Train Epoch: 1000/50000  |  Train Loss 697860.937500  |  Val Loss 773176.437500
+Train Epoch: 1500/50000  |  Train Loss 600623.562500  |  Val Loss 667014.375000
+Train Epoch: 2000/50000  |  Train Loss 488202.406250  |  Val Loss 544055.625000
+Train Epoch: 2500/50000  |  Train Loss 369335.406250  |  Val Loss 413783.437500
+Train Epoch: 3000/50000  |  Train Loss 255190.203125  |  Val Loss 288369.187500
+Train Epoch: 3500/50000  |  Train Loss 157623.265625  |  Val Loss 180682.781250
+Train Epoch: 4000/50000  |  Train Loss 86586.242188  |  Val Loss 101386.867188
+Train Epoch: 4500/50000  |  Train Loss 41082.066406  |  Val Loss 49179.882812
+Train Epoch: 5000/50000  |  Train Loss 16253.934570  |  Val Loss 19676.234375
+Train Epoch: 5500/50000  |  Train Loss 6127.338379  |  Val Loss 6997.401855
+Train Epoch: 6000/50000  |  Train Loss 4163.424316  |  Val Loss 4151.886719
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 6207  |  The Best Validation Error: 4016.424072
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/6207  |  Train Loss 4089.031250
+Train Epoch:  500/6207  |  Train Loss 4044.151123
+Train Epoch: 1000/6207  |  Train Loss 4037.698242
+Train Epoch: 1500/6207  |  Train Loss 4031.593750
+Train Epoch: 2000/6207  |  Train Loss 4025.578125
+Train Epoch: 2500/6207  |  Train Loss 4019.649414
+Train Epoch: 3000/6207  |  Train Loss 4013.761475
+Train Epoch: 3500/6207  |  Train Loss 4007.801758
+Train Epoch: 4000/6207  |  Train Loss 4001.795898
+Train Epoch: 4500/6207  |  Train Loss 3995.989990
+Train Epoch: 5000/6207  |  Train Loss 3990.061279
+Train Epoch: 5500/6207  |  Train Loss 3984.297852
+Train Epoch: 6000/6207  |  Train Loss 3978.717041
+Test Loss
+MSE: 2606.409180
+MAE: 37.992573
+MAPE(%): 4.827897

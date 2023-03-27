@@ -1,0 +1,33 @@
+Train Epoch:    0/10000  |  Train Loss 382.264008  |  Val Loss 250.218796
+Train Epoch:  500/10000  |  Train Loss 83.262947  |  Val Loss 82.153786
+Train Epoch: 1000/10000  |  Train Loss 63.531567  |  Val Loss 67.749237
+Train Epoch: 1500/10000  |  Train Loss 47.587757  |  Val Loss 65.309631
+Train Epoch: 2000/10000  |  Train Loss 38.068653  |  Val Loss 65.734871
+Train Epoch: 2500/10000  |  Train Loss 32.655567  |  Val Loss 64.613052
+Train Epoch: 3000/10000  |  Train Loss 29.226362  |  Val Loss 63.923462
+Train Epoch: 3500/10000  |  Train Loss 26.553122  |  Val Loss 64.529915
+Train Epoch: 4000/10000  |  Train Loss 24.286013  |  Val Loss 66.141663
+Train Epoch: 4500/10000  |  Train Loss 22.273314  |  Val Loss 68.172287
+Train Epoch: 5000/10000  |  Train Loss 20.537107  |  Val Loss 70.437172
+Train Epoch: 5500/10000  |  Train Loss 18.977312  |  Val Loss 72.326866
+Train Epoch: 6000/10000  |  Train Loss 17.577322  |  Val Loss 73.844620
+Train Epoch: 6500/10000  |  Train Loss 16.303596  |  Val Loss 75.255424
+Train Epoch: 7000/10000  |  Train Loss 15.149381  |  Val Loss 76.610954
+Train Epoch: 7500/10000  |  Train Loss 14.070027  |  Val Loss 78.205124
+Train Epoch: 8000/10000  |  Train Loss 13.084250  |  Val Loss 79.470535
+Train Epoch: 8500/10000  |  Train Loss 12.175330  |  Val Loss 80.564980
+Train Epoch: 9000/10000  |  Train Loss 11.317857  |  Val Loss 81.491394
+Train Epoch: 9500/10000  |  Train Loss 10.514379  |  Val Loss 82.280853
+--------------------------------------------------------------------------------
+The Best Epoch: 2956  |  The Best Validation Error: 63.855835
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/2956  |  Train Loss 24.390810
+Train Epoch:  500/2956  |  Train Loss 17.987167
+Train Epoch: 1000/2956  |  Train Loss 16.100983
+Train Epoch: 1500/2956  |  Train Loss 14.601176
+Train Epoch: 2000/2956  |  Train Loss 13.294380
+Train Epoch: 2500/2956  |  Train Loss 12.123145
+Test Loss
+MSE: 60.447620
+MAE: 3.843609
