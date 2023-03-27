@@ -35,7 +35,7 @@ for month in range(1, 13):
         
         try:
             # exclude missing data
-            temp = pd.read_excel(file_path,  header=[3, 4, 5]).iloc[0:24, [26]]
+            temp = pd.read_excel(file_path,  header=[3, 4, 5]).iloc[0:24, [44]]  # 26: RISE, 44: undergrad dorm B
         except FileNotFoundError:
             # linear interpolation to fill missing data
             # read data as NaN for missing data

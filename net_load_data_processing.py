@@ -35,17 +35,14 @@ for month in range(1, 13):
         try:
             # exclude missing data
             temp = pd.read_excel(file_path,  header=[7, 8, 9])
-            temp1 = temp["신재생에너지동"]["유효전력"]
-            temp2 = temp["신재생에너지동(E)"]["유효전력"]
+            temp1 = temp["대학기숙사A동"]["유효전력"]
+            temp2 = temp["대학기숙사A동(E)"]["유효전력"]
             temp = temp1 + temp2
             temp.columns = [date]
             
         except FileNotFoundError:
-            # linear interpolation to fill missing data
-            # read data as NaN for missing data
-            temp = pd.DataFrame(index=range(24), columns=[date]).astype(float)
-            temp[:] = np.nan
             print('missing data! / month: ', month, ' date: ', day)
+            continue
 
 
 
@@ -53,14 +50,9 @@ for month in range(1, 13):
         try:
             temp.astype('float64')
         except ValueError:
-            try:
-                temp = temp.interpolate(method='akima', axis=0)
-                print('missing data! but interpolated / month: ', month, ' date: ', day)
-            except TypeError:
-                temp = pd.DataFrame(index=range(24), columns=[date]).astype(float)
-                temp[:] = np.nan
-                print('missing data! / month: ', month, ' date: ', day)
-            
+            print('missing data! / month: ', month, ' date: ', day)
+            continue
+
         # need to initialize dataframe 'week' for week and 'weekend' for weekend
         if month == 1 and day == 1:
             df = temp
@@ -71,15 +63,8 @@ for month in range(1, 13):
     
 df = df.transpose()
 df.index = pd.to_numeric(df.index)
-df = df.interpolate(method='akima', axis=0)
 
 # restrict the number of decimal places to 2
 df = df.round(1)
 
-# 211231 isn't interpolated because it is the last row of the data. So copy the value of 211230 to 211231
-df.iloc[-1,:] = df.iloc[-2,:]
-
-# add load_flag column
-df = pd.concat([df, cal[['load_flag']]], axis=1)
-
-df.to_csv("./processed_data/netload/RISE_all_interpolated.csv")
+df.to_csv("./processed_data/netload/DORM_2021_netload.csv")

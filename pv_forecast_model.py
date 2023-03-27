@@ -101,8 +101,9 @@ def set_seed(seed):
 
 # load the data and split into X and Y
 def load_data(drop_features):
-    X_pv = pd.read_csv('./processed_data/pv/X_pv.csv', index_col=0)
-    Y_pv = pd.read_csv('./processed_data/pv/Y_pv.csv', index_col=0)
+    X_pv = pd.read_csv('./processed_data/pv/X_pv_231days.csv', index_col=0)
+    Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days.csv', index_col=0)
+    label_interval = get_label_interval(X_pv)
     if drop_features != 'No_drop':
         X = X_pv.drop(columns = drop_features)
     else:
@@ -113,7 +114,7 @@ def load_data(drop_features):
     col_len = len(col)
     X = torch.FloatTensor(X.values)
     Y = torch.FloatTensor(Y.values)
-    return X, Y, col, col_len
+    return X, Y, col, col_len, label_interval
 
 
 # split data into mini_train, valid, train, test
@@ -132,6 +133,19 @@ def split_data(X, Y, batch_size, data_len, train_pie, mini_train_pie):
     
     return mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size
 
+
+# get the number of days of each month as label_interval list
+def get_label_interval(X):
+    label_interval = []
+    for i in range(1, 13):
+        cnt = 0
+        for idx in X.index:
+            if '21{0:0>2}'.format(i) in str(idx):
+                cnt+=1
+        label_interval.append(cnt)
+    return label_interval
+        
+        
 
 # create folder if not exist
 def create_folder(directory):
@@ -310,15 +324,15 @@ mape = MAPE()
 
 
 # data loading
-# X: 210104-211229, Y: 210105-211230 / 175*50
-X, Y, col_list, col_len = load_data(drop_features)
+# X: 210104-211229, Y: 210105-211230 / 231*50
+X, Y, col_list, col_len, label_interval = load_data(drop_features)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
-# 112개   210104 ~ 210818
-# 28개    210819 ~ 211018
-# 140개   210104 ~ 211018
-# 35개    211019 ~ 211229
+# 147개   210104 ~ 210819
+# 37개    210820 ~ 211015
+# 184개   210104 ~ 211015
+# 47개    211018 ~ 211229
 
 
 
@@ -326,7 +340,6 @@ mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini
 dir = './experiment_outputs/pv_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
-label_interval = [13, 13, 17, 16, 14, 11, 17, 16, 16, 13, 14, 13]
 
 file_name = f'{model_case}_{drop_features}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
 _path = dir+"plots/daily_pv_features/"+file_name

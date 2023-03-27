@@ -48,9 +48,9 @@ class Net(nn.Module):
             
         self.fc1 = nn.Linear(num_of_features, self.hidd_dim)
         self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
-        # self.fc3 = nn.Linear(self.hidden_dim, 24)
-        self.fc3 = nn.Linear(self.hidden_dim, self.hidden_dimm)
-        self.fc4 = nn.Linear(self.hidden_dimm, 24)
+        self.fc3 = nn.Linear(self.hidden_dim, 24)
+        # self.fc3 = nn.Linear(self.hidden_dim, self.hidden_dimm)
+        # self.fc4 = nn.Linear(self.hidden_dimm, 24)
         self.relu = nn.ReLU()
     
     def forward(self, x):
@@ -58,10 +58,10 @@ class Net(nn.Module):
         x = self.relu(x)
         x = self.fc2(x)
         x = self.relu(x)
-        # output = self.fc3(x)
-        x = self.fc3(x)
-        x = self.relu(x)
-        output = self.fc4(x)
+        output = self.fc3(x)
+        # x = self.fc3(x)
+        # x = self.relu(x)
+        # output = self.fc4(x)
         return output
     
 
@@ -78,8 +78,8 @@ def set_seed(seed):
 
 # load the data and split into X and Y
 def load_data():
-    X_load = pd.read_csv('./processed_data/load/X_load.csv', index_col=0)
-    Y_load = pd.read_csv('./processed_data/load/Y_load.csv', index_col=0)
+    X_load = pd.read_csv('./processed_data/load/X_load_231days.csv', index_col=0)
+    Y_load = pd.read_csv('./processed_data/load/Y_load_231days.csv', index_col=0)
     label_interval = get_label_interval(X_load)
     X = torch.FloatTensor(X_load.values)
     Y = torch.FloatTensor(Y_load.values)
@@ -112,6 +112,7 @@ def get_label_interval(X):
             if '21{0:0>2}'.format(i) in str(idx):
                 cnt+=1
         label_interval.append(cnt)
+    return label_interval
 
 
 
@@ -235,15 +236,15 @@ mape = MAPE()
 
 
 # data loading
-# X: 210104-211229, Y: 210105-211230 / 173*50
+# X: 210104-211229, Y: 210105-211230 / 231*50
 X, Y, label_interval = load_data()
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
-# 110개   210104 ~ 210816
-# 28개    210817 ~ 211013
-# 138개   210104 ~ 211013
-# 35개    211014 ~ 211229
+# 147개   210104 ~ 210819
+# 37개    210820 ~ 211015
+# 184개   210104 ~ 211015
+# 47개    211018 ~ 211229
 
 
 # load plotting

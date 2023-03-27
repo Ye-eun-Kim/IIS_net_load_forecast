@@ -1,17 +1,32 @@
+# ex.
+# python weather_processing.py RISE
+# python weather_processing.py DORM
+
+
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import sys
 
 
 
-pv = pd.read_csv('./processed_data/pv/RISE_2021_PV_no_interpol.csv', index_col=0)
+building = sys.argv[1]
+if building == 'RISE':
+    pv_path = './processed_data/pv/RISE_2021_PV_no_interpol.csv'
+    load_path = './processed_data/load/week_2021_load.csv'
+elif building == 'DORM':
+    pv_path = './processed_data/pv/DORM_2021_PV_no_interpol.csv'
+    load_path = './processed_data/load/DORM_2021_load.csv'
+
+pv = pd.read_csv(pv_path, index_col=0)
 forecast_weather = pd.read_csv('./processed_data/weather/forecast_weather.csv')
 observation_weather = pd.read_csv('./preprocessed_data/weather_data/weather_observation.csv', index_col=2, encoding='cp949').drop(['지점', '지점명'], axis=1)
-load = pd.read_csv('./processed_data/load/week_2021_load.csv', index_col=0)
+load = pd.read_csv(load_path, index_col=0)
 cal = pd.read_csv('./processed_data/2021_cal_flag.csv', index_col=0)
 
 observation_weather.columns = ['DS', 'SL', 'SR']  # (DS) Duration of Sunlight: 가조시간(hr) | (SL) SunLight 합계 일조시간(hr) | (SR) Solar Radiation 합계 일사량(MJ/m2)
-cal_used = cal[['miss&week']]
+cal_used = cal[['miss&week', 'miss_flag_pv']]
 
 
 
@@ -54,27 +69,35 @@ comb.sort_index(inplace=True)
 X_pv = pd.DataFrame(columns=comb.columns)
 Y_pv = pd.DataFrame(columns=comb.columns)
 
-X_load = pd.DataFrame(columns=load.columns)
-Y_load = pd.DataFrame(columns=load.columns)
-
 
 # select the data of dates that are valid
 # valid: the day and the next day is valid
+comb_len = len(comb)
 cnt = 0
 for idx, row in comb.iterrows():
-    if cal_used.loc[idx]['miss&week'] == 0:
-        if cal_used.iloc[cnt+1].values[0] == 0:
+    if cnt == comb_len-1:
+        break
+    if cal_used.iloc[cnt+1]['miss&week'] == 0:
+        if cal_used.iloc[cnt]['miss_flag_pv'] == 0:
             X_pv = X_pv.append(row)
             Y_pv = Y_pv.append(comb.iloc[cnt+1])
-            X_load = X_load.append(load.loc[idx])
+            # X_load = X_load.append(load.loc[idx])
     cnt+=1
     
 
-Y_load = load.loc[Y_pv.index]
 
+#find intersection of Y_pv and load
+load_pv_y = set(Y_pv.index) & set(load.index)
+drop_index = (set(load.index) - load_pv_y)
 
-X_pv.to_csv('./processed_data/pv/X_pv.csv')
-Y_pv.to_csv('./processed_data/pv/Y_pv.csv')
+# drop the rows of load that are in drop_index
+load_ = load.drop(drop_index, axis=0)
+X_pv = X_pv.drop(210103, axis=0)
+Y_pv = Y_pv.drop(210104, axis=0)
 
-X_load.to_csv('./processed_data/load/X_load.csv')
-Y_load.to_csv('./processed_data/load/Y_load.csv')
+len_load = len(load_)
+
+X_pv.to_csv(f'./processed_data/pv/X_pv_231days_{building}.csv')
+Y_pv.to_csv(f'./processed_data/pv/Y_pv_231days_{building}.csv')
+load_.iloc[0:len_load-1].to_csv(f'./processed_data/load/X_load_231days_{building}.csv')
+load_.iloc[1:len_load].to_csv(f'./processed_data/load/Y_load_231days_{building}.csv')
