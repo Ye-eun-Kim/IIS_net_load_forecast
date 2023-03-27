@@ -100,9 +100,14 @@ def set_seed(seed):
 
 
 # load the data and split into X and Y
-def load_data(drop_features):
-    X_pv = pd.read_csv('./processed_data/pv/X_pv_231days.csv', index_col=0)
-    Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days.csv', index_col=0)
+def load_data(drop_features, building):
+    if building == 'RISE':
+        X_pv = pd.read_csv('./processed_data/pv/X_pv_231days_RISE.csv', index_col=0)
+        Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days_RISE.csv', index_col=0)
+    elif building == 'DORM':
+        X_pv = pd.read_csv('./processed_data/pv/X_pv_231days_DORM.csv', index_col=0)
+        Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days_DORM.csv', index_col=0)
+
     label_interval = get_label_interval(X_pv)
     if drop_features != 'No_drop':
         X = X_pv.drop(columns = drop_features)
@@ -314,8 +319,9 @@ def evaluate(model, valid_dataloader):
 
 set_seed(RANDOM_SEED)
 model_case = int(sys.argv[1])
-if len(sys.argv) == 3:
-    drop_features = sys.argv[2].split(',')
+building = sys.argv[2]
+if len(sys.argv) == 4:
+    drop_features = sys.argv[3].split(',')
 else:
     drop_features = 'No_drop'
 mae = nn.L1Loss()
@@ -325,7 +331,7 @@ mape = MAPE()
 
 # data loading
 # X: 210104-211229, Y: 210105-211230 / 231*50
-X, Y, col_list, col_len, label_interval = load_data(drop_features)
+X, Y, col_list, col_len, label_interval = load_data(drop_features, building)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
@@ -341,7 +347,7 @@ dir = './experiment_outputs/pv_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
 
-file_name = f'{model_case}_{drop_features}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
+file_name = f'{building}_{timestamp}_{model_case}_{drop_features}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}'
 _path = dir+"plots/daily_pv_features/"+file_name
 create_folder(_path)
 plot_daily_feature(X, label_interval, col_list, (10,2.5), 8, mini_train_size-1, train_size-1, _path+'/')

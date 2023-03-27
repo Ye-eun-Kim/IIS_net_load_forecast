@@ -77,9 +77,13 @@ def set_seed(seed):
 
 
 # load the data and split into X and Y
-def load_data():
-    X_load = pd.read_csv('./processed_data/load/X_load_231days.csv', index_col=0)
-    Y_load = pd.read_csv('./processed_data/load/Y_load_231days.csv', index_col=0)
+def load_data(building):
+    if building == 'RISE':
+        X_load = pd.read_csv('./processed_data/load/X_load_231days_RISE.csv', index_col=0)
+        Y_load = pd.read_csv('./processed_data/load/Y_load_231days_RISE.csv', index_col=0)
+    elif building == 'DORM':
+        X_load = pd.read_csv('./processed_data/load/X_load_231days_DORM.csv', index_col=0)
+        Y_load = pd.read_csv('./processed_data/load/Y_load_231days_DORM.csv', index_col=0)
     label_interval = get_label_interval(X_load)
     X = torch.FloatTensor(X_load.values)
     Y = torch.FloatTensor(Y_load.values)
@@ -230,14 +234,16 @@ def evaluate(model, valid_dataloader):
 
 set_seed(RANDOM_SEED)
 model_case = int(sys.argv[1])
+building = sys.argv[2]
 num_of_features = 24
 mae = nn.L1Loss()
 mape = MAPE()
 
 
+
 # data loading
 # X: 210104-211229, Y: 210105-211230 / 231*50
-X, Y, label_interval = load_data()
+X, Y, label_interval = load_data(building)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
@@ -252,8 +258,8 @@ dir = './experiment_outputs/load_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
 
-file_name = f'{model_case}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
-plot_daily_load(X, label_interval, (10,4), "Daily Load Sum in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+file_name = f'{building}_{timestamp}_{model_case}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}'
+plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
 # model setting
@@ -327,7 +333,7 @@ print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
 
 
 
-plot(1, 20, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 20 days', 18, dir+f'plots/forecasted_load/{file_name}.png')
+plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 8 days', 18, dir+f'plots/forecasted_load/{file_name}.png')
 
 
 
