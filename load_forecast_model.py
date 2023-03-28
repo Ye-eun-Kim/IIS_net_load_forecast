@@ -33,22 +33,22 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidd_dim = 256   # good
-            self.hidden_dim = 36
+            self.hidden_dim1 = int(num_of_features*10)
+            self.hidden_dim2 = int(num_of_features*10*0.15)  #good
         elif model_config['case'] == 2:
             self.hidd_dim = 1024
             self.hidden_dim = 8192
             self.hidden_dimm = 144
         elif model_config['case'] == 3:
-            self.hidd_dim = 240
-            self.hidden_dim = 72
+            self.hidden_dim1 = 500 
+            self.hidden_dim2 = 75
         elif model_config['case'] == 4:
-            self.hidd_dim = 120
-            self.hidden_dim = 36
+            self.hidden_dim1 = 480
+            self.hidden_dim2 = 72
             
-        self.fc1 = nn.Linear(num_of_features, self.hidd_dim)
-        self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
-        self.fc3 = nn.Linear(self.hidden_dim, 24)
+        self.fc1 = nn.Linear(num_of_features, self.hidden_dim1)
+        self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
+        self.fc3 = nn.Linear(self.hidden_dim2, 24)
         # self.fc3 = nn.Linear(self.hidden_dim, self.hidden_dimm)
         # self.fc4 = nn.Linear(self.hidden_dimm, 24)
         self.relu = nn.ReLU()
@@ -77,16 +77,20 @@ def set_seed(seed):
 
 
 # load the data and split into X and Y
-def load_data(building):
-    if building == 'RISE':
-        X_load = pd.read_csv('./processed_data/load/X_load_231days_RISE.csv', index_col=0)
-        Y_load = pd.read_csv('./processed_data/load/Y_load_231days_RISE.csv', index_col=0)
-    elif building == 'DORM':
-        X_load = pd.read_csv('./processed_data/load/X_load_231days_DORM.csv', index_col=0)
-        Y_load = pd.read_csv('./processed_data/load/Y_load_231days_DORM.csv', index_col=0)
+def load_data(building, num_of_features):
+    if num_of_features == 48 :
+        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
+        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
+        X_load = X_load.drop(columns = ['SL', 'SR'])
+        Y_load = Y_load.drop(columns = ['SL', 'SR'])
+
+    elif num_of_features == 24 :
+        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
+        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
+
     label_interval = get_label_interval(X_load)
     X = torch.FloatTensor(X_load.values)
-    Y = torch.FloatTensor(Y_load.values)
+    Y = torch.FloatTensor(Y_load.iloc[:,0:24].values)
     return X, Y, label_interval
 
 
@@ -234,8 +238,8 @@ def evaluate(model, valid_dataloader):
 
 set_seed(RANDOM_SEED)
 model_case = int(sys.argv[1])
-building = sys.argv[2]
-num_of_features = 24
+building = sys.argv[3]
+num_of_features = int(sys.argv[2])
 mae = nn.L1Loss()
 mape = MAPE()
 
@@ -243,7 +247,7 @@ mape = MAPE()
 
 # data loading
 # X: 210104-211229, Y: 210105-211230 / 231*50
-X, Y, label_interval = load_data(building)
+X, Y, label_interval = load_data(building, num_of_features)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
@@ -258,8 +262,8 @@ dir = './experiment_outputs/load_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
 
-file_name = f'{building}_{timestamp}_{model_case}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}'
-plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+file_name = f'{building}_{timestamp}_{model_case}_{num_of_features}'
+# plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
 # model setting

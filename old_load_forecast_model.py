@@ -1,7 +1,7 @@
 # Need two additional arguments: case, num_of_features, basic_path
 # ex.
 # python load_forecast_model.py 1 25 "./processed_data/RISE_2021_load.csv"
-# python load_forecast_model.py 1 24 "./processed_data/week_2021_load.csv"
+# python old_load_forecast_model.py 1 24 "./processed_data/load/week_2021_load_interval_error.csv"
 
 
 import torch
@@ -36,8 +36,8 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidd_dim = 256   # good
-            self.hidden_dim = 36
+            self.hidden_dim1 = int(num_of_features*10)
+            self.hidden_dim2 = int(num_of_features*10*0.15)  #good
         elif model_config['case'] == 2:
             self.hidd_dim = 240
             self.hidden_dim = 36

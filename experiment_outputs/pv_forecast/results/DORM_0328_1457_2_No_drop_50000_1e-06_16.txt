@@ -1,0 +1,20 @@
+Train Epoch:    0/50000  |  Train Loss 210.765060  |  Val Loss 127.079102
+Train Epoch:  500/50000  |  Train Loss 40.873692  |  Val Loss 34.314388
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 708  |  The Best Validation Error: 31.291307
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/708  |  Train Loss 35.446239
+Train Epoch:  500/708  |  Train Loss 26.602442
+Test Loss
+MSE: 23.942213
+MAE: 2.466343

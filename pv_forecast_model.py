@@ -60,21 +60,31 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.model_type = model_config['case']
         if model_config['case'] == 1:
-            self.hidd_dim = 512
-            self.hidden_dim = 75
+            self.hidden_dim1 = int(col_len*10)
+            self.hidden_dim2 = int(col_len*10*0.15)  #good
         elif model_config['case'] == 2:
-            self.hidd_dim = int(col_len*10)
-            self.hidden_dim = int(col_len*10*0.2*0.3)
+            self.hidden_dim1 = 50
+            self.hidden_dim2 = 100
+            self.hidden_dim3 = 200
+            self.hidden_dim4 = 400
+            self.hidden_dim5 = 100
+            self.hidden_dim6 = 50
         elif model_config['case'] == 3:
-            self.hidd_dim = 500
-            self.hidden_dim = 75  #good
+            self.hidden_dim1 = 490
+            self.hidden_dim2 = 73
         elif model_config['case'] == 4:
-            self.hidd_dim = 250
-            self.hidden_dim = 75
+            self.hidden_dim1 = int(col_len*10)
+            self.hidden_dim2 = int(col_len*10*0.15)
             
-        self.fc1 = nn.Linear(col_len, self.hidd_dim)
-        self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
-        self.fc3 = nn.Linear(self.hidden_dim, 24)
+        self.fc1 = nn.Linear(col_len, self.hidden_dim1)
+        self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
+        self.fc3 = nn.Linear(self.hidden_dim2, 24)
+        # self.fc3 = nn.Linear(self.hidden_dim2, self.hidden_dim3)
+        # self.fc4 = nn.Linear(self.hidden_dim3, self.hidden_dim4)
+        # self.fc5 = nn.Linear(self.hidden_dim4, self.hidden_dim5)
+        # self.fc6 = nn.Linear(self.hidden_dim5, self.hidden_dim6)
+        # self.fc7 = nn.Linear(self.hidden_dim6, 24)
+        
         self.relu = nn.ReLU()
 
     
@@ -84,6 +94,15 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         output = self.fc3(x)
+        # x = self.fc3(x)
+        # x = self.relu(x)
+        # x = self.fc4(x)
+        # x = self.relu(x)
+        # x = self.fc5(x)
+        # x = self.relu(x)
+        # x = self.fc6(x)
+        # x = self.relu(x)
+        # output = self.fc7(x)
         return output
 
 
@@ -347,7 +366,7 @@ dir = './experiment_outputs/pv_forecast/'
 now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
 
-file_name = f'{building}_{timestamp}_{model_case}_{drop_features}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}'
+file_name = f'{building}_{timestamp}_{model_case}_{drop_features}_{col_len}'
 _path = dir+"plots/daily_pv_features/"+file_name
 create_folder(_path)
 plot_daily_feature(X, label_interval, col_list, (10,2.5), 8, mini_train_size-1, train_size-1, _path+'/')
@@ -423,6 +442,9 @@ test_mse = criterion2(test_output[:, 0:24], test_y[:, 0:24])
 test_mae = mae(test_output[:, 0:24], test_y[:, 0:24])    
 # cannot use mape...
 # test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
+
+
+
 
 
 print('Test Loss', file = f)

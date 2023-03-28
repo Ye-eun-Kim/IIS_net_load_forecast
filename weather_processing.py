@@ -101,3 +101,7 @@ X_pv.to_csv(f'./processed_data/pv/X_pv_231days_{building}.csv')
 Y_pv.to_csv(f'./processed_data/pv/Y_pv_231days_{building}.csv')
 load_.iloc[0:len_load-1].to_csv(f'./processed_data/load/X_load_231days_{building}.csv')
 load_.iloc[1:len_load].to_csv(f'./processed_data/load/Y_load_231days_{building}.csv')
+
+load_weather = pd.concat([load_, observation_weather, forecast_weather], axis=1, join='inner')
+load_weather.iloc[0:len_load-1].to_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv')
+load_weather.iloc[1:len_load].to_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv')
