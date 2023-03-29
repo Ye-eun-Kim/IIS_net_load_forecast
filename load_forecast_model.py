@@ -17,7 +17,7 @@ import pandas as pd
 import random
 import matplotlib.pyplot as plt
 import datetime
-import sys
+import sys, os
 import Dataset_Class as DC
 
 
@@ -76,6 +76,15 @@ def set_seed(seed):
     torch.backends.cudnn.benchmark = False
     np.random.seed(RANDOM_SEED)
     random.seed(RANDOM_SEED)
+
+
+# create folder if not exist
+def create_folder(directory):
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print ('Error: Creating directory. ' +  directory)
 
 
 # load the data and split into X and Y
@@ -275,10 +284,10 @@ X, Y, label_interval = load_data(building, num_of_features)
 dataset = DC.CustomDataset(X, Y)
 data_len = len(dataset)
 mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
-# 147개   210104 ~ 210819
-# 37개    210820 ~ 211015
-# 184개   210104 ~ 211015
-# 47개    211018 ~ 211229
+# 147개   210104 ~ 210818
+# 37개    210819 ~ 211014
+# 184개   210104 ~ 211014
+# 47개    211017 ~ 211229
 
 
 # load plotting
@@ -368,3 +377,10 @@ plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast 
 f.close()
 
 torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
+
+# save test_output tensor to a csv file
+test_y_idx = [211018, 211019, 211020, 211021, 211022, 211025, 211026, 211027, 211028, 211101, 211102, 211103, 211104, 211105, 211108, 211109, 211110, 211111, 211112, 211115, 211116, 211118, 211119, 211122, 211123, 211124, 211125, 211126, 211129, 211201, 211202, 211203, 211206, 211207, 211208, 211209, 211213, 211214, 211215, 211216, 211217, 211220, 211221, 211227, 211228, 211229, 211230]
+test_output_ = test_output.detach().numpy()
+test_output_ = pd.DataFrame(test_output_, index = test_y_idx, columns = [f'{i:02d}' for i in range(24)])
+create_folder('./experiment_outputs/test_output/load/')
+test_output_.to_csv(f'./experiment_outputs/test_output/load/{file_name}.csv', index = True, header = True)
