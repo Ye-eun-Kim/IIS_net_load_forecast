@@ -1,7 +1,9 @@
 # Need two additional arguments: case
 # ex.
 # python load_forecast_model.py 1 25 "./processed_data/RISE_2021_load.csv"    ---> deleted
-# python load_forecast_model.py 1
+# python load_forecast_model.py 1 24 RISE
+# python load_forecast_model.py 1 48 DORM
+
 
 
 import torch
@@ -87,7 +89,13 @@ def load_data(building, num_of_features):
     elif num_of_features == 24 :
         X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
         Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
+        
+        
+    elif num_of_features == 50 :
+        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
+        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
 
+        
     label_interval = get_label_interval(X_load)
     X = torch.FloatTensor(X_load.values)
     Y = torch.FloatTensor(Y_load.iloc[:,0:24].values)
@@ -194,13 +202,29 @@ def plot_loss(mini_train_loss_arr, val_loss_arr, range_start, best_val_epoch, fi
     plt.savefig(save_path)
 
     
+    
 def plot(i, length, output, Y, fig_size, title, font_size, save_path):
     fig = plt.figure(figsize=fig_size)
+    ax = plt.axes()
+    ax.plot(Y.detach().numpy()[i:i+length,:].reshape(-1), c='blue', label = 'Actual data')
+    ax.plot(output.detach().numpy()[i:i+length,:].reshape(-1), c='red', label = 'forecast data')
+    
     plt.title(title, fontsize = font_size)
     plt.xlabel('Time (h)', fontsize = font_size)
-    plt.ylabel('Load', fontsize = font_size)
-    plt.plot(Y.detach().numpy()[i:i+length,:].reshape(-1), c='blue', label = 'Actual data')
-    plt.plot(output.detach().numpy()[i:i+length,:].reshape(-1), c='red', label = 'forecast data')
+    plt.ylabel('Load (kWh)', fontsize = font_size)
+
+    # Set the x-tick positions and labels
+    x_ticks = []
+    x_labels = []
+    
+    for i in range(0, 24*(length+1), 24):
+        x_ticks.append(i)
+        x_labels.append(f'{i//24}')
+        
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels(x_labels)
+
+
     plt.legend(loc='lower right', fontsize = 13)
     plt.savefig(save_path)
 

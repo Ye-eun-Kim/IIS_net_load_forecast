@@ -5,14 +5,14 @@
 
 # Need two additional arguments: case, drop_features(list)
 # ex.
-# python pv_forecast_model.py 1 PR_9,PR_15,PR_21 -- X
-# python pv_forecast_model.py 2 PP_6,PP_9,PP_12,PP_15,PP_18 -- X
-# python pv_forecast_model.py 2 TM_6,TM_9,TM_12,TM_15,TM_18 -- X
-# python pv_forecast_model.py 2 WS_6,WS_9,WS_12,WS_15,WS_18 -- X
-# python pv_forecast_model.py 2 SK_6,SK_9,SK_12,SK_15,SK_18 -- X
-# python pv_forecast_model.py 2 DS -- X
-# python pv_forecast_model.py 2 SL -- X
-# python pv_forecast_model.py 2 SR -- X
+# python pv_forecast_model.py 1 RISE PR_9,PR_15,PR_21 -- X
+# python pv_forecast_model.py 1 RISE PP_6,PP_9,PP_12,PP_15,PP_18 -- X
+# python pv_forecast_model.py 1 RISE TM_6,TM_9,TM_12,TM_15,TM_18 -- X
+# python pv_forecast_model.py 1 RISE WS_6,WS_9,WS_12,WS_15,WS_18 -- X
+# python pv_forecast_model.py 1 RISE SK_6,SK_9,SK_12,SK_15,SK_18 -- X
+# python pv_forecast_model.py 1 DORM DS -- X
+# python pv_forecast_model.py 1 DORM SL -- X
+# python pv_forecast_model.py 1 DORM SR -- X
 
 # python pv_forecast_model.py 1
 
@@ -294,13 +294,29 @@ def plot_loss(mini_train_loss_arr, val_loss_arr, range_start, best_val_epoch, fi
     plt.savefig(save_path)
 
     
+    
 def plot(i, length, output, Y, fig_size, title, font_size, save_path):
     fig = plt.figure(figsize=fig_size)
+    ax = plt.axes()
+    ax.plot(Y.detach().numpy()[i:i+length,:].reshape(-1), c='blue', label = 'Actual data')
+    ax.plot(output.detach().numpy()[i:i+length,:].reshape(-1), c='red', label = 'forecast data')
+    
     plt.title(title, fontsize = font_size)
     plt.xlabel('Time (h)', fontsize = font_size)
-    plt.ylabel('PV', fontsize = font_size)
-    plt.plot(Y.detach().numpy()[i:i+length,:].reshape(-1), c='blue', label = 'Actual data')
-    plt.plot(output.detach().numpy()[i:i+length,:].reshape(-1), c='red', label = 'forecast data')
+    plt.ylabel('PV (kWh)', fontsize = font_size)
+
+    # Set the x-tick positions and labels
+    x_ticks = []
+    x_labels = []
+    
+    for i in range(0, 24*(length+1), 24):
+        x_ticks.append(i)
+        x_labels.append(f'{i//24}')
+        
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels(x_labels)
+
+
     plt.legend(loc='lower right', fontsize = 13)
     plt.savefig(save_path)
 
@@ -454,7 +470,7 @@ print('MAE: {:.6f}'.format(test_mae), file = f)
 
 
 
-plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast PV for 20 days', 18, dir+f'plots/forecasted_pv/{file_name}.png')
+plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast PV for 8 days', 18, dir+f'plots/forecasted_pv/{file_name}.png')
 
 
 
