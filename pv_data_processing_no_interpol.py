@@ -37,7 +37,7 @@ for month in range(1, 13):
         
         try:
             # exclude missing data
-            temp = pd.read_excel(file_path,  header=[3, 4, 5]).iloc[0:24, [34]]    # 26: RISE, 34: undergrad dorm B
+            temp = pd.read_excel(file_path,  header=[3, 4, 5]).iloc[0:24, [14]]    # 26: RISE, 34: undergrad dorm B, 14: dasan
         except FileNotFoundError:
             print('FileNotFoundError! / month: ', month, ' date: ', day)
             continue
@@ -53,6 +53,7 @@ for month in range(1, 13):
             temp.astype('float64')
         except ValueError:
             print('missing data! / month: ', month, ' date: ', day)
+            continue
 
         if month == 1 and day == 1:
             df = temp
@@ -66,6 +67,6 @@ df = df.transpose()
 df.index = pd.to_numeric(df.index)
 
 # change negative value to 0 in df because the interpolated values are not all positive or zero
-df[df < 0] = 0
+df[df < 0.0] = 0
 
-df.to_csv("./processed_data/pv/DORM_2021_PV_no_interpol.csv")
+df.to_csv("./processed_data/pv/DASAN_2021_PV_no_interpol.csv")

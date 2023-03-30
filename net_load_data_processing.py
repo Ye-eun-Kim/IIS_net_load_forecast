@@ -35,8 +35,8 @@ for month in range(1, 13):
         try:
             # exclude missing data
             temp = pd.read_excel(file_path,  header=[7, 8, 9])
-            temp1 = temp["대학기숙사A동"]["유효전력"]
-            temp2 = temp["대학기숙사A동(E)"]["유효전력"]
+            temp1 = temp["다산빌딩"]["유효전력"]
+            temp2 = temp["다산빌딩(E)"]["유효전력"]
             temp = temp1 + temp2
             temp.columns = [date]
             
@@ -67,4 +67,4 @@ df.index = pd.to_numeric(df.index)
 # restrict the number of decimal places to 2
 df = df.round(1)
 
-df.to_csv("./processed_data/netload/DORM_2021_netload.csv")
+df.to_csv("./processed_data/netload/DASAN_2021_netload.csv")

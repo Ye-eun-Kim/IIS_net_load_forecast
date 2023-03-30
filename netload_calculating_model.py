@@ -124,9 +124,9 @@ def program(version):
     elif version == 'DORM':
         # DORM version
         print('DORM version', file = f)
-        load_file_name = "DORM_0329_1801_1_24"
-        pv_file_name = "DORM_0329_1802_1_['SL']_49"
-        net_load_file_name = "DORM_0330_0000_1_49"
+        load_file_name = "DORM_0330_1628_1_24"
+        pv_file_name = "DORM_0330_1628_1_['SL']_49"
+        net_load_file_name = "DORM_0330_1627_1_49"
         test_net_load_file_name = "Y_netload_231days_DORM_testset"
 
 
