@@ -120,12 +120,9 @@ def set_seed(seed):
 
 # load the data and split into X and Y
 def load_data(drop_features, building):
-    if building == 'RISE':
-        X_pv = pd.read_csv('./processed_data/pv/X_pv_231days_RISE.csv', index_col=0)
-        Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days_RISE.csv', index_col=0)
-    elif building == 'DORM':
-        X_pv = pd.read_csv('./processed_data/pv/X_pv_231days_DORM.csv', index_col=0)
-        Y_pv = pd.read_csv('./processed_data/pv/Y_pv_231days_DORM.csv', index_col=0)
+    X_pv = pd.read_csv(f'./processed_data/pv/X_pv_231days_{building}.csv', index_col=0)
+    Y_pv = pd.read_csv(f'./processed_data/pv/Y_pv_231days_{building}.csv', index_col=0)
+        
 
     label_interval = get_label_interval(X_pv)
     if drop_features != 'No_drop':

@@ -124,10 +124,18 @@ def program(version):
     elif version == 'DORM':
         # DORM version
         print('DORM version', file = f)
-        load_file_name = "DORM_0330_1628_1_24"
-        pv_file_name = "DORM_0330_1628_1_['SL']_49"
-        net_load_file_name = "DORM_0330_1627_1_49"
+        # load_file_name = "DORM_0331_1652_1_24"
+        load_file_name = "DORM_0331_2229_1_29"
+        pv_file_name = "DORM_0331_1657_1_['SL']_49"
+        net_load_file_name = "DORM_0331_1644_1_49"
         test_net_load_file_name = "Y_netload_231days_DORM_testset"
+        
+    elif version == 'MACH':
+        print('MACH version', file = f)
+        load_file_name = "MACH_0331_1652_1_24"
+        pv_file_name = "MACH_0331_1659_1_['SL']_49"
+        net_load_file_name = "MACH_0331_1644_1_49"
+        test_net_load_file_name = "Y_netload_231days_MACH_testset"
 
 
 
@@ -195,3 +203,4 @@ def program(version):
 
 program('RISE')
 program('DORM')
+program('MACH')

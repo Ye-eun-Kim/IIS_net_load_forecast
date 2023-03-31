@@ -385,13 +385,13 @@ test_output, test_y = evaluate(model, test_dataloader)
 test_mse = criterion2(test_output[:, 0:24], test_y[:, 0:24])
 test_mae = mae(test_output[:, 0:24], test_y[:, 0:24])    
 # cannot use mape...
-# test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
+test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
 
 
 print('Test Loss', file = f)
 print('MSE: {:.6f}'.format(test_mse), file = f)
 print('MAE: {:.6f}'.format(test_mae), file = f)
-# print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
+print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
 
 
 create_folder(dir+f'plots/forecasted_netload/')

@@ -89,20 +89,22 @@ def create_folder(directory):
 
 # load the data and split into X and Y
 def load_data(building, num_of_features):
-    if num_of_features == 48 :
+    if num_of_features == 49 :
         X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
         Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
-        X_load = X_load.drop(columns = ['SL', 'SR'])
-        Y_load = Y_load.drop(columns = ['SL', 'SR'])
+        X_load = X_load.drop(columns = ['SL'])
+        Y_load = Y_load.drop(columns = ['SL'])
 
     elif num_of_features == 24 :
         X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
         Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
         
         
-    elif num_of_features == 50 :
+    elif num_of_features == 29 :
         X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
         Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
+        X_load = X_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
+        Y_load = Y_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
 
         
     label_interval = get_label_interval(X_load)
@@ -296,7 +298,7 @@ now = datetime.datetime.now()
 timestamp = now.strftime("%m%d_%H%M")
 
 file_name = f'{building}_{timestamp}_{model_case}_{num_of_features}'
-# plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
 # model setting

@@ -17,9 +17,9 @@ def program(building):
     elif building == 'DORM':
         pv_path = './processed_data/pv/DORM_2021_PV_no_interpol.csv'
         load_path = './processed_data/load/DORM_2021_load.csv'
-    elif building == 'DASAN':
-        pv_path = './processed_data/pv/DASAN_2021_PV_no_interpol.csv'
-        load_path = './processed_data/load/DASAN_2021_load.csv'
+    elif building == 'MACH':
+        pv_path = './processed_data/pv/MACH_2021_PV_no_interpol.csv'
+        load_path = './processed_data/load/MACH_2021_load.csv'
 
     pv = pd.read_csv(pv_path, index_col=0)
     forecast_weather = pd.read_csv('./processed_data/weather/forecast_weather.csv')
@@ -119,4 +119,4 @@ def program(building):
     
 program('RISE')
 program('DORM')
-program('DASAN')
+program('MACH')
