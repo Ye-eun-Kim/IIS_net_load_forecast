@@ -1,0 +1,35 @@
+Train Epoch:    0/50000  |  Train Loss 391.908417  |  Val Loss 242.246094
+Train Epoch:  500/50000  |  Train Loss 212.477432  |  Val Loss 126.746338
+Train Epoch: 1000/50000  |  Train Loss 116.788887  |  Val Loss 91.103508
+Train Epoch: 1500/50000  |  Train Loss 91.382271  |  Val Loss 80.914398
+Train Epoch: 2000/50000  |  Train Loss 81.479538  |  Val Loss 71.532188
+Train Epoch: 2500/50000  |  Train Loss 74.953247  |  Val Loss 65.662407
+Train Epoch: 3000/50000  |  Train Loss 69.708580  |  Val Loss 62.031200
+Train Epoch: 3500/50000  |  Train Loss 65.038017  |  Val Loss 59.567223
+Train Epoch: 4000/50000  |  Train Loss 60.762325  |  Val Loss 57.792187
+Train Epoch: 4500/50000  |  Train Loss 56.897720  |  Val Loss 56.614906
+Train Epoch: 5000/50000  |  Train Loss 53.371750  |  Val Loss 55.820766
+Train Epoch: 5500/50000  |  Train Loss 50.187347  |  Val Loss 55.366737
+Train Epoch: 6000/50000  |  Train Loss 47.393154  |  Val Loss 55.135525
+Train Epoch: 6500/50000  |  Train Loss 44.977310  |  Val Loss 55.072376
+--------------------------------------------------------------------------------
+The Best Epoch: 6600  |  The Best Validation Error: 55.025181
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/6600  |  Train Loss 46.305523
+Train Epoch:  500/6600  |  Train Loss 43.749538
+Train Epoch: 1000/6600  |  Train Loss 42.038330
+Train Epoch: 1500/6600  |  Train Loss 40.596046
+Train Epoch: 2000/6600  |  Train Loss 39.362583
+Train Epoch: 2500/6600  |  Train Loss 38.281548
+Train Epoch: 3000/6600  |  Train Loss 37.312607
+Train Epoch: 3500/6600  |  Train Loss 36.427429
+Train Epoch: 4000/6600  |  Train Loss 35.626202
+Train Epoch: 4500/6600  |  Train Loss 34.883533
+Train Epoch: 5000/6600  |  Train Loss 34.199215
+Train Epoch: 5500/6600  |  Train Loss 33.560631
+Train Epoch: 6000/6600  |  Train Loss 32.967800
+Train Epoch: 6500/6600  |  Train Loss 32.406910
+Test Loss
+MSE: 40.203045
+MAE: 3.293994

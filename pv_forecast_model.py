@@ -14,7 +14,7 @@
 # python pv_forecast_model.py 1 DORM SL -- X
 # python pv_forecast_model.py 1 DORM SR -- X
 
-# python pv_forecast_model.py 1 RISE SL   ----  DECIDED ARGUMENTS!!
+# python pv_forecast_model.py 1 RISE   ----  DECIDED ARGUMENTS!!
 
 # all the features in pv data
 '''
@@ -39,6 +39,7 @@ import random
 import matplotlib.pyplot as plt
 import datetime, sys, os
 import Dataset_Class as DC
+import pywt
 
 
 
@@ -62,20 +63,7 @@ class Net(nn.Module):
         if model_config['case'] == 1:
             self.hidden_dim1 = int(col_len*10)
             self.hidden_dim2 = int(col_len*10*0.15)  #good
-        elif model_config['case'] == 2:
-            self.hidden_dim1 = 50
-            self.hidden_dim2 = 100
-            self.hidden_dim3 = 200
-            self.hidden_dim4 = 400
-            self.hidden_dim5 = 100
-            self.hidden_dim6 = 50
-        elif model_config['case'] == 3:
-            self.hidden_dim1 = 490
-            self.hidden_dim2 = 73
-        elif model_config['case'] == 4:
-            self.hidden_dim1 = int(col_len*10)
-            self.hidden_dim2 = int(col_len*10*0.15)
-            
+           
         self.fc1 = nn.Linear(col_len, self.hidden_dim1)
         self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
         self.fc3 = nn.Linear(self.hidden_dim2, 24)
@@ -94,15 +82,6 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         output = self.fc3(x)
-        # x = self.fc3(x)
-        # x = self.relu(x)
-        # x = self.fc4(x)
-        # x = self.relu(x)
-        # x = self.fc5(x)
-        # x = self.relu(x)
-        # x = self.fc6(x)
-        # x = self.relu(x)
-        # output = self.fc7(x)
         return output
 
 
@@ -131,6 +110,15 @@ def load_data(drop_features, building):
         X = X_pv
         
     Y = Y_pv.iloc[:,0:24]
+    
+    # wavelet transform
+    for i in range(X.shape[0]):
+        coeffs = pywt.wavedec(X.iloc[i,:24], 'db4', level=8)
+        for j in [1,2]:
+            coeffs[j] = np.zeros_like(coeffs[j])
+        X_wav = pywt.waverec(coeffs, 'db4')
+        X.iloc[i,:24] = X_wav[:24]
+    
     col = X.columns
     col_len = len(col)
     X = torch.FloatTensor(X.values)
@@ -350,12 +338,13 @@ def evaluate(model, valid_dataloader):
 
 
 set_seed(RANDOM_SEED)
-model_case = int(sys.argv[1])
-building = sys.argv[2]
-if len(sys.argv) == 4:
-    drop_features = sys.argv[3].split(',')
-else:
-    drop_features = 'No_drop'
+model_case = 1
+building = sys.argv[1]
+drop_features = ['SL']
+# if len(sys.argv) == 4:
+#     drop_features = sys.argv[3].split(',')
+# else:
+#     drop_features = 'No_drop'
 mae = nn.L1Loss()
 mape = MAPE()
 
@@ -382,7 +371,7 @@ timestamp = now.strftime("%m%d_%H%M")
 file_name = f'{building}_{timestamp}_{model_case}_{drop_features}_{col_len}'
 _path = dir+"plots/daily_pv_features/"+file_name
 create_folder(_path)
-plot_daily_feature(X, label_interval, col_list, (10,2.5), 8, mini_train_size-1, train_size-1, _path+'/')
+# plot_daily_feature(X, label_interval, col_list, (10,2.5), 8, mini_train_size-1, train_size-1, _path+'/')
 
 
 # model setting
@@ -416,22 +405,22 @@ for epoch in range(EPOCHS):
         best_val_epoch = epoch
         patience = 0
     # early stopping
-    else:
-        patience+=1
-        if patience > 1:
-            print(f'Patience is increased, patience: {patience}', file = f)
-    if epoch % 500 == 0:
-        # write a log on file
-        print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
-    if patience == 3:
-        break
+    # else:
+    #     patience+=1
+        # if patience > 1:
+        #     print(f'Patience is increased, patience: {patience}', file = f)
+    # if epoch % 500 == 0:
+    #     # write a log on file
+    #     print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
+    # if patience == 100:
+    #     break
         
 print('-'*80, file = f)
 print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
 print('-'*80, file = f)
 print('-'*80, file = f)
 
-plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch = best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
+# plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch = best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
 
 
 
@@ -461,8 +450,8 @@ test_mae = mae(test_output[:, 0:24], test_y[:, 0:24])
 
 
 print('Test Loss', file = f)
-print('MSE: {:.6f}'.format(test_mse), file = f)
-print('MAE: {:.6f}'.format(test_mae), file = f)
+print('MSE: {:.4f}'.format(test_mse), file = f)
+print('MAE: {:.4f}'.format(test_mae), file = f)
 # print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
 
 

@@ -19,6 +19,8 @@ import random
 import matplotlib.pyplot as plt
 import datetime, sys, os
 import Dataset_Class as DC
+import pywt
+
 
 
 
@@ -42,28 +44,12 @@ class Net(nn.Module):
         if model_config['case'] == 1:
             self.hidden_dim1 = int(col_len*10)
             self.hidden_dim2 = int(col_len*10*0.15)  #good
-        elif model_config['case'] == 2:
-            self.hidden_dim1 = 50
-            self.hidden_dim2 = 100
-            self.hidden_dim3 = 200
-            self.hidden_dim4 = 400
-            self.hidden_dim5 = 100
-            self.hidden_dim6 = 50
-        elif model_config['case'] == 3:
-            self.hidden_dim1 = 490
-            self.hidden_dim2 = 73
-        elif model_config['case'] == 4:
-            self.hidden_dim1 = int(col_len*10)
-            self.hidden_dim2 = int(col_len*10*0.15)
+        
             
         self.fc1 = nn.Linear(col_len, self.hidden_dim1)
         self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
         self.fc3 = nn.Linear(self.hidden_dim2, 24)
-        # self.fc3 = nn.Linear(self.hidden_dim2, self.hidden_dim3)
-        # self.fc4 = nn.Linear(self.hidden_dim3, self.hidden_dim4)
-        # self.fc5 = nn.Linear(self.hidden_dim4, self.hidden_dim5)
-        # self.fc6 = nn.Linear(self.hidden_dim5, self.hidden_dim6)
-        # self.fc7 = nn.Linear(self.hidden_dim6, 24)
+
         
         self.relu = nn.ReLU()
 
@@ -74,15 +60,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         output = self.fc3(x)
-        # x = self.fc3(x)
-        # x = self.relu(x)
-        # x = self.fc4(x)
-        # x = self.relu(x)
-        # x = self.fc5(x)
-        # x = self.relu(x)
-        # x = self.fc6(x)
-        # x = self.relu(x)
-        # output = self.fc7(x)
+
         return output
 
 
@@ -105,6 +83,17 @@ def load_data(building):
     label_interval = get_label_interval(X)
     col = X.columns
     col_len = len(col)
+    
+    
+    # wavelet transform
+    for i in range(X.shape[0]):
+        coeffs = pywt.wavedec(X.iloc[i,:24], 'db4', level=8)
+        for j in [1,2]:
+            coeffs[j] = np.zeros_like(coeffs[j])
+        X_wav = pywt.waverec(coeffs, 'db4')
+        X.iloc[i,:24] = X_wav[:24]
+        
+
     X = torch.FloatTensor(X.values)
     Y = torch.FloatTensor(Y.values)
     return X, Y, col, col_len, label_interval
@@ -289,8 +278,8 @@ def evaluate(model, valid_dataloader):
 
 
 set_seed(RANDOM_SEED)
-model_case = int(sys.argv[1])
-building = sys.argv[2]
+model_case = 1
+building = sys.argv[1]
 mae = nn.L1Loss()
 mape = MAPE()
 
@@ -352,15 +341,15 @@ for epoch in range(EPOCHS):
         best_val_epoch = epoch
         patience = 0
     # early stopping
-    else:
-        patience+=1
-        if patience > 1:
-            print(f'Patience is increased, patience: {patience}', file = f)
-    if epoch % 500 == 0:
-        # write a log on file
-        print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
-    if patience == 3:
-        break
+    # else:
+    #     patience+=1
+    #     if patience > 1:
+    #         print(f'Patience is increased, patience: {patience}', file = f)
+    # if epoch % 500 == 0:
+    #     # write a log on file
+    #     print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
+    # if patience == 3:
+    #     break
         
 print('-'*80, file = f)
 print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
@@ -389,9 +378,9 @@ test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
 
 
 print('Test Loss', file = f)
-print('MSE: {:.6f}'.format(test_mse), file = f)
-print('MAE: {:.6f}'.format(test_mae), file = f)
-print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
+print('MSE: {:.4f}'.format(test_mse), file = f)
+print('MAE: {:.4f}'.format(test_mae), file = f)
+print('MAPE(%): {:.4f}'.format(test_mape*100), file = f)
 
 
 create_folder(dir+f'plots/forecasted_netload/')

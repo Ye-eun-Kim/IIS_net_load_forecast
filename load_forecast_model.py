@@ -4,6 +4,7 @@
 # python load_forecast_model.py 1 24 RISE
 # python load_forecast_model.py 1 48 DORM
 
+# python load_forecast_model.py RISE
 
 
 import torch
@@ -19,6 +20,7 @@ import matplotlib.pyplot as plt
 import datetime
 import sys, os
 import Dataset_Class as DC
+import pywt
 
 
 # USE_CUDA = torch.cuda.is_available()
@@ -37,22 +39,12 @@ class Net(nn.Module):
         if model_config['case'] == 1:
             self.hidden_dim1 = int(num_of_features*10)
             self.hidden_dim2 = int(num_of_features*10*0.15)  #good
-        elif model_config['case'] == 2:
-            self.hidd_dim = 1024
-            self.hidden_dim = 8192
-            self.hidden_dimm = 144
-        elif model_config['case'] == 3:
-            self.hidden_dim1 = 500 
-            self.hidden_dim2 = 75
-        elif model_config['case'] == 4:
-            self.hidden_dim1 = 480
-            self.hidden_dim2 = 72
+
             
         self.fc1 = nn.Linear(num_of_features, self.hidden_dim1)
         self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
         self.fc3 = nn.Linear(self.hidden_dim2, 24)
-        # self.fc3 = nn.Linear(self.hidden_dim, self.hidden_dimm)
-        # self.fc4 = nn.Linear(self.hidden_dimm, 24)
+
         self.relu = nn.ReLU()
     
     def forward(self, x):
@@ -61,9 +53,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         output = self.fc3(x)
-        # x = self.fc3(x)
-        # x = self.relu(x)
-        # output = self.fc4(x)
+
         return output
     
 
@@ -96,8 +86,8 @@ def load_data(building, num_of_features):
         Y_load = Y_load.drop(columns = ['SL'])
 
     elif num_of_features == 24 :
-        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
-        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
+        X = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
+        Y = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
         
         
     elif num_of_features == 29 :
@@ -106,10 +96,19 @@ def load_data(building, num_of_features):
         X_load = X_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
         Y_load = Y_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
 
+
+    # wavelet transform
+    for i in range(X.shape[0]):
+        coeffs = pywt.wavedec(X.iloc[i,:], 'db4', level=8)
+        for j in [1,2]:
+            coeffs[j] = np.zeros_like(coeffs[j])
+        X_wav = pywt.waverec(coeffs, 'db4')
+        X.iloc[i,:] = X_wav[:49]
         
-    label_interval = get_label_interval(X_load)
-    X = torch.FloatTensor(X_load.values)
-    Y = torch.FloatTensor(Y_load.iloc[:,0:24].values)
+        
+    label_interval = get_label_interval(X)
+    X = torch.FloatTensor(X.values)
+    Y = torch.FloatTensor(Y.iloc[:,0:24].values)
     return X, Y, label_interval
 
 
@@ -272,9 +271,10 @@ def evaluate(model, valid_dataloader):
 
 
 set_seed(RANDOM_SEED)
-model_case = int(sys.argv[1])
-building = sys.argv[3]
-num_of_features = int(sys.argv[2])
+model_case = 1
+building = sys.argv[1]
+num_of_features = 24
+# num_of_features = int(sys.argv[2])
 mae = nn.L1Loss()
 mape = MAPE()
 
@@ -331,16 +331,16 @@ for epoch in range(EPOCHS):
         best_val_loss = val_loss
         best_val_epoch = epoch
         patience = 0
-    # early stopping
-    else:
-        patience+=1
-        if patience > 1:
-            print(f'Patience is increased, patience: {patience}', file = f)
-    if epoch % 500 == 0:
-        # write a log on file
-        print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
-    if patience == 3:
-        break
+    # # early stopping
+    # else:
+    #     patience+=1
+    #     if patience > 1:
+    #         print(f'Patience is increased, patience: {patience}', file = f)
+    # if epoch % 500 == 0:
+    #     # write a log on file
+    #     print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
+    # if patience == 3:
+    #     break
         
 print('-'*80, file = f)
 print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)

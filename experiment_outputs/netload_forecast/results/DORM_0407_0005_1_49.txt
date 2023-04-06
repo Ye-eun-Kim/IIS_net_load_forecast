@@ -1,0 +1,92 @@
+--------------------------------------------------------------------------------
+The Best Epoch: 41611  |  The Best Validation Error: 246.198853
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/41611  |  Train Loss 152.396545
+Train Epoch:  500/41611  |  Train Loss 150.592148
+Train Epoch: 1000/41611  |  Train Loss 150.092346
+Train Epoch: 1500/41611  |  Train Loss 149.612823
+Train Epoch: 2000/41611  |  Train Loss 149.082565
+Train Epoch: 2500/41611  |  Train Loss 148.697403
+Train Epoch: 3000/41611  |  Train Loss 148.306274
+Train Epoch: 3500/41611  |  Train Loss 147.925537
+Train Epoch: 4000/41611  |  Train Loss 147.554794
+Train Epoch: 4500/41611  |  Train Loss 147.203705
+Train Epoch: 5000/41611  |  Train Loss 146.864624
+Train Epoch: 5500/41611  |  Train Loss 146.515839
+Train Epoch: 6000/41611  |  Train Loss 146.190002
+Train Epoch: 6500/41611  |  Train Loss 145.861893
+Train Epoch: 7000/41611  |  Train Loss 145.536972
+Train Epoch: 7500/41611  |  Train Loss 145.190506
+Train Epoch: 8000/41611  |  Train Loss 144.827209
+Train Epoch: 8500/41611  |  Train Loss 144.500214
+Train Epoch: 9000/41611  |  Train Loss 144.181931
+Train Epoch: 9500/41611  |  Train Loss 143.873688
+Train Epoch: 10000/41611  |  Train Loss 143.557770
+Train Epoch: 10500/41611  |  Train Loss 143.258560
+Train Epoch: 11000/41611  |  Train Loss 142.972366
+Train Epoch: 11500/41611  |  Train Loss 142.689209
+Train Epoch: 12000/41611  |  Train Loss 142.437927
+Train Epoch: 12500/41611  |  Train Loss 142.134918
+Train Epoch: 13000/41611  |  Train Loss 141.869873
+Train Epoch: 13500/41611  |  Train Loss 141.582199
+Train Epoch: 14000/41611  |  Train Loss 141.320724
+Train Epoch: 14500/41611  |  Train Loss 141.055466
+Train Epoch: 15000/41611  |  Train Loss 140.807755
+Train Epoch: 15500/41611  |  Train Loss 140.565765
+Train Epoch: 16000/41611  |  Train Loss 140.289352
+Train Epoch: 16500/41611  |  Train Loss 140.036819
+Train Epoch: 17000/41611  |  Train Loss 139.785004
+Train Epoch: 17500/41611  |  Train Loss 139.539993
+Train Epoch: 18000/41611  |  Train Loss 139.311295
+Train Epoch: 18500/41611  |  Train Loss 139.062027
+Train Epoch: 19000/41611  |  Train Loss 138.830338
+Train Epoch: 19500/41611  |  Train Loss 138.622025
+Train Epoch: 20000/41611  |  Train Loss 138.354202
+Train Epoch: 20500/41611  |  Train Loss 138.180740
+Train Epoch: 21000/41611  |  Train Loss 137.908676
+Train Epoch: 21500/41611  |  Train Loss 137.689316
+Train Epoch: 22000/41611  |  Train Loss 137.463867
+Train Epoch: 22500/41611  |  Train Loss 137.242508
+Train Epoch: 23000/41611  |  Train Loss 137.017654
+Train Epoch: 23500/41611  |  Train Loss 136.811691
+Train Epoch: 24000/41611  |  Train Loss 136.606079
+Train Epoch: 24500/41611  |  Train Loss 136.383957
+Train Epoch: 25000/41611  |  Train Loss 136.183929
+Train Epoch: 25500/41611  |  Train Loss 135.965363
+Train Epoch: 26000/41611  |  Train Loss 135.776703
+Train Epoch: 26500/41611  |  Train Loss 135.589798
+Train Epoch: 27000/41611  |  Train Loss 135.361481
+Train Epoch: 27500/41611  |  Train Loss 135.165146
+Train Epoch: 28000/41611  |  Train Loss 134.965057
+Train Epoch: 28500/41611  |  Train Loss 134.765701
+Train Epoch: 29000/41611  |  Train Loss 134.570572
+Train Epoch: 29500/41611  |  Train Loss 134.373734
+Train Epoch: 30000/41611  |  Train Loss 134.184601
+Train Epoch: 30500/41611  |  Train Loss 133.991364
+Train Epoch: 31000/41611  |  Train Loss 133.804108
+Train Epoch: 31500/41611  |  Train Loss 133.607941
+Train Epoch: 32000/41611  |  Train Loss 133.434372
+Train Epoch: 32500/41611  |  Train Loss 133.231522
+Train Epoch: 33000/41611  |  Train Loss 133.045532
+Train Epoch: 33500/41611  |  Train Loss 132.870117
+Train Epoch: 34000/41611  |  Train Loss 132.679733
+Train Epoch: 34500/41611  |  Train Loss 132.493362
+Train Epoch: 35000/41611  |  Train Loss 132.316956
+Train Epoch: 35500/41611  |  Train Loss 132.125946
+Train Epoch: 36000/41611  |  Train Loss 131.955719
+Train Epoch: 36500/41611  |  Train Loss 131.753555
+Train Epoch: 37000/41611  |  Train Loss 131.574966
+Train Epoch: 37500/41611  |  Train Loss 131.385361
+Train Epoch: 38000/41611  |  Train Loss 131.208603
+Train Epoch: 38500/41611  |  Train Loss 131.027054
+Train Epoch: 39000/41611  |  Train Loss 130.840744
+Train Epoch: 39500/41611  |  Train Loss 130.661148
+Train Epoch: 40000/41611  |  Train Loss 130.498566
+Train Epoch: 40500/41611  |  Train Loss 130.331070
+Train Epoch: 41000/41611  |  Train Loss 130.150055
+Train Epoch: 41500/41611  |  Train Loss 129.979813
+Test Loss
+MSE: 229.4613
+MAE: 11.4261
+MAPE(%): 8.1193

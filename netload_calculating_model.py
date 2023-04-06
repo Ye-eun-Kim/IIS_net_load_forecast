@@ -116,19 +116,28 @@ def program(version):
         # set the file names to use
         # RISE version
         print('RISE version', file = f)
-        load_file_name = "RISE_0329_1701_1_24"
-        pv_file_name = "RISE_0329_1657_1_['SL']_49"
-        net_load_file_name = "RISE_0330_0000_1_49"
+        # load_file_name = "RISE_0329_1701_1_24"
+        # pv_file_name = "RISE_0329_1657_1_['SL']_49"
+        # net_load_file_name = "RISE_0330_0000_1_49"
+        # test_net_load_file_name = "Y_netload_231days_RISE_testset"
+        load_file_name = "RISE_0406_1545_1_24"
+        pv_file_name = "RISE_0406_1539_1_['SL']_49"
+        net_load_file_name = "RISE_0406_1324_1_49"
         test_net_load_file_name = "Y_netload_231days_RISE_testset"
         
     elif version == 'DORM':
         # DORM version
         print('DORM version', file = f)
-        # load_file_name = "DORM_0331_1652_1_24"
-        load_file_name = "DORM_0331_2229_1_29"
-        pv_file_name = "DORM_0331_1657_1_['SL']_49"
-        net_load_file_name = "DORM_0331_1644_1_49"
+        # load_file_name = "DORM_0331_1652_1_24"   이게 더 예전 버전
+        # load_file_name = "DORM_0331_2229_1_29"
+        # pv_file_name = "DORM_0331_1657_1_['SL']_49"
+        # net_load_file_name = "DORM_0331_1644_1_49"
+        # test_net_load_file_name = "Y_netload_231days_DORM_testset"
+        load_file_name = "DORM_0407_0006_1_24"
+        pv_file_name = "DORM_0407_0040_1_['SL']_49"
+        net_load_file_name = "DORM_0407_0005_1_49"
         test_net_load_file_name = "Y_netload_231days_DORM_testset"
+        
         
     elif version == 'MACH':
         print('MACH version', file = f)
@@ -201,6 +210,6 @@ def program(version):
 
 
 
-program('RISE')
+# program('RISE')
 program('DORM')
-program('MACH')
+# program('MACH')
