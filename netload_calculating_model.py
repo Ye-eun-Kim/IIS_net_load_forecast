@@ -141,9 +141,13 @@ def program(version):
         
     elif version == 'MACH':
         print('MACH version', file = f)
-        load_file_name = "MACH_0331_1652_1_24"
-        pv_file_name = "MACH_0331_1659_1_['SL']_49"
-        net_load_file_name = "MACH_0331_1644_1_49"
+        # load_file_name = "MACH_0331_1652_1_24"
+        # pv_file_name = "MACH_0331_1659_1_['SL']_49"
+        # net_load_file_name = "MACH_0331_1644_1_49"
+        # test_net_load_file_name = "Y_netload_231days_MACH_testset"
+        load_file_name = "MACH_0407_0630_1_24"
+        pv_file_name = "MACH_0407_0630_1_['SL']_49"
+        net_load_file_name = "MACH_0407_0631_1_49"
         test_net_load_file_name = "Y_netload_231days_MACH_testset"
 
 
@@ -211,5 +215,5 @@ def program(version):
 
 
 # program('RISE')
-program('DORM')
-# program('MACH')
+# program('DORM')
+program('MACH')

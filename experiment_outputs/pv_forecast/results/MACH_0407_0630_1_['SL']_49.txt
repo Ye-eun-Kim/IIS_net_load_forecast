@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------
+The Best Epoch: 7336  |  The Best Validation Error: 110.299240
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/7336  |  Train Loss 48.565094
+Train Epoch:  500/7336  |  Train Loss 42.829235
+Train Epoch: 1000/7336  |  Train Loss 41.062881
+Train Epoch: 1500/7336  |  Train Loss 39.783504
+Train Epoch: 2000/7336  |  Train Loss 38.747784
+Train Epoch: 2500/7336  |  Train Loss 37.857239
+Train Epoch: 3000/7336  |  Train Loss 37.071857
+Train Epoch: 3500/7336  |  Train Loss 36.350651
+Train Epoch: 4000/7336  |  Train Loss 35.680237
+Train Epoch: 4500/7336  |  Train Loss 35.056072
+Train Epoch: 5000/7336  |  Train Loss 34.473614
+Train Epoch: 5500/7336  |  Train Loss 33.923630
+Train Epoch: 6000/7336  |  Train Loss 33.398067
+Train Epoch: 6500/7336  |  Train Loss 32.897923
+Train Epoch: 7000/7336  |  Train Loss 32.411091
+Test Loss
+MSE: 134.0394
+MAE: 5.9291

@@ -103,7 +103,7 @@ def load_data(building, num_of_features):
         for j in [1,2]:
             coeffs[j] = np.zeros_like(coeffs[j])
         X_wav = pywt.waverec(coeffs, 'db4')
-        X.iloc[i,:] = X_wav[:49]
+        X.iloc[i,:] = X_wav[:]
         
         
     label_interval = get_label_interval(X)
@@ -344,7 +344,7 @@ for epoch in range(EPOCHS):
         
 print('-'*80, file = f)
 print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
-print('-'*80, file = f)
+print('-'*80, file = f)  
 print('-'*80, file = f)
 
 plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch=best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
