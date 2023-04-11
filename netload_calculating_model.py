@@ -116,39 +116,42 @@ def program(version):
         # set the file names to use
         # RISE version
         print('RISE version', file = f)
-        # load_file_name = "RISE_0329_1701_1_24"
-        # pv_file_name = "RISE_0329_1657_1_['SL']_49"
-        # net_load_file_name = "RISE_0330_0000_1_49"
-        # test_net_load_file_name = "Y_netload_231days_RISE_testset"
-        load_file_name = "RISE_0406_1545_1_24"
-        pv_file_name = "RISE_0406_1539_1_['SL']_49"
-        net_load_file_name = "RISE_0406_1324_1_49"
+        load_file_name = "RISE_0329_1701_1_24"
+        pv_file_name = "RISE_0329_1657_1_['SL']_49"
+        net_load_file_name = "RISE_0330_0000_1_49"
         test_net_load_file_name = "Y_netload_231days_RISE_testset"
+        linear_file_name = "netload_RISE_0411_0317_49"
+        # load_file_name = "RISE_0406_1545_1_24"
+        # pv_file_name = "RISE_0406_1539_1_['SL']_49"
+        # net_load_file_name = "RISE_0406_1324_1_49"
+        # test_net_load_file_name = "Y_netload_231days_RISE_testset"
         
     elif version == 'DORM':
         # DORM version
         print('DORM version', file = f)
         # load_file_name = "DORM_0331_1652_1_24"   이게 더 예전 버전
-        # load_file_name = "DORM_0331_2229_1_29"
-        # pv_file_name = "DORM_0331_1657_1_['SL']_49"
-        # net_load_file_name = "DORM_0331_1644_1_49"
-        # test_net_load_file_name = "Y_netload_231days_DORM_testset"
-        load_file_name = "DORM_0407_0006_1_24"
-        pv_file_name = "DORM_0407_0040_1_['SL']_49"
-        net_load_file_name = "DORM_0407_0005_1_49"
+        load_file_name = "DORM_0331_2229_1_29"
+        pv_file_name = "DORM_0331_1657_1_['SL']_49"
+        net_load_file_name = "DORM_0331_1644_1_49"
         test_net_load_file_name = "Y_netload_231days_DORM_testset"
+        linear_file_name = "netload_DORM_0411_0326_49"
+        # load_file_name = "DORM_0407_0006_1_24"
+        # pv_file_name = "DORM_0407_0040_1_['SL']_49"
+        # net_load_file_name = "DORM_0407_0005_1_49"
+        # test_net_load_file_name = "Y_netload_231days_DORM_testset"
         
         
     elif version == 'MACH':
         print('MACH version', file = f)
-        # load_file_name = "MACH_0331_1652_1_24"
-        # pv_file_name = "MACH_0331_1659_1_['SL']_49"
-        # net_load_file_name = "MACH_0331_1644_1_49"
-        # test_net_load_file_name = "Y_netload_231days_MACH_testset"
-        load_file_name = "MACH_0407_0630_1_24"
-        pv_file_name = "MACH_0407_0630_1_['SL']_49"
-        net_load_file_name = "MACH_0407_0631_1_49"
+        load_file_name = "MACH_0331_1652_1_24"
+        pv_file_name = "MACH_0331_1659_1_['SL']_49"
+        net_load_file_name = "MACH_0331_1644_1_49"
         test_net_load_file_name = "Y_netload_231days_MACH_testset"
+        linear_file_name = "netload_MACH_0411_0329_49"
+        # load_file_name = "MACH_0407_0630_1_24"
+        # pv_file_name = "MACH_0407_0630_1_['SL']_49"
+        # net_load_file_name = "MACH_0407_0631_1_49"
+        # test_net_load_file_name = "Y_netload_231days_MACH_testset"
 
 
 
@@ -156,6 +159,7 @@ def program(version):
     load = pd.read_csv(f'./experiment_outputs/test_output/load/{load_file_name}.csv', index_col=0)
     pv = pd.read_csv(f'./experiment_outputs/test_output/pv/{pv_file_name}.csv', index_col=0)
     netload = pd.read_csv(f'./experiment_outputs/test_output/netload/{net_load_file_name}.csv', index_col=0)
+    linear = pd.read_csv(f'./experiment_outputs/test_output/linear/{linear_file_name}.csv', index_col=0)
 
     # load the net-load test_y data
     actual_netload = pd.read_csv(f'./processed_data/netload/{test_net_load_file_name}.csv', index_col=0)
@@ -166,6 +170,7 @@ def program(version):
     # convert the data to torch tensor to calculate the loss
     actual_netload_ = torch.FloatTensor(actual_netload.values)
     calculated_netload_ = torch.FloatTensor(calculated_netload.values)
+    linear_netload_ = torch.FloatTensor(linear.values)
     netload_ = torch.FloatTensor(netload.values)
 
     # define the indicies for the loss
@@ -184,11 +189,18 @@ def program(version):
     direct_mae = mae(netload_[:, 0:24], actual_netload_[:, 0:24])
     direct_mape = mape(netload_[:, 0:24], actual_netload_[:, 0:24])
     
+    # LINEAR model
+    linear_mse = mse(linear_netload_[:, 0:24], actual_netload_[:, 0:24])
+    linear_mae = mae(linear_netload_[:, 0:24], actual_netload_[:, 0:24])
+    linear_mape = mape(linear_netload_[:, 0:24], actual_netload_[:, 0:24])
+
+    
     
     # plot the results
     days = len(actual_netload)
     plot(actual_netload_, calculated_netload_, (50,50), 70, 'Indirect', days, f'./experiment_outputs/COMPARE_RESULTS/{timestamp}_{version}_indirect.png')
     plot(actual_netload_, netload_, (50,50), 70, 'Direct', days, f'./experiment_outputs/COMPARE_RESULTS/{timestamp}_{version}_direct.png')
+    plot(actual_netload_, linear_netload_, (50,50), 70, 'Linear', days, f'./experiment_outputs/COMPARE_RESULTS/{timestamp}_{version}_linear.png')
 
 
 
@@ -209,11 +221,18 @@ def program(version):
     print('', file = f)
 
 
+    print("The Loss of Linear Model", file = f)
+    print('MSE: {:.4f}'.format(linear_mse), file = f)
+    print('MAE: {:.4f}'.format(linear_mae), file = f)
+    print('MAPE(%): {:.4f}'.format(linear_mape*100), file = f)
+    print('-'*50, file = f)
+    print('', file = f)
+
     f.close()
 
 
 
 
-# program('RISE')
-# program('DORM')
+program('RISE')
+program('DORM')
 program('MACH')
