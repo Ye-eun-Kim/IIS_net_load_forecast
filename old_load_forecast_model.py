@@ -38,19 +38,12 @@ class Net(nn.Module):
         if model_config['case'] == 1:
             self.hidden_dim1 = int(num_of_features*10)
             self.hidden_dim2 = int(num_of_features*10*0.15)  #good
-        elif model_config['case'] == 2:
-            self.hidd_dim = 240
-            self.hidden_dim = 36
-        elif model_config['case'] == 3:
-            self.hidd_dim = 240
-            self.hidden_dim = 72
-        elif model_config['case'] == 4:
-            self.hidd_dim = 120
-            self.hidden_dim = 36
+
             
-        self.fc1 = nn.Linear(num_of_features, self.hidd_dim)
-        self.fc2 = nn.Linear(self.hidd_dim, self.hidden_dim)
-        self.fc3 = nn.Linear(self.hidden_dim, 24)
+        self.fc1 = nn.Linear(num_of_features, self.hidden_dim1)
+        self.fc2 = nn.Linear(self.hidden_dim1, self.hidden_dim2)
+        self.fc3 = nn.Linear(self.hidden_dim2, 24)
+
         self.relu = nn.ReLU()
     
     def forward(self, x):
@@ -59,6 +52,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.relu(x)
         output = self.fc3(x)
+
         return output
     
 
@@ -75,15 +69,28 @@ def set_seed(seed):
 
 
 # load the data and split into X and Y
-def load_data(path):
-    load = pd.read_csv(path, index_col = 0)
-    num_of_days = len(load)
-    X = load.iloc[0:num_of_days-1,:]
-    Y = load.iloc[1:num_of_days,:]
+def load_data(building):
+    X= pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
+    Y = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
+
     label_interval = get_label_interval(X)
     X = torch.FloatTensor(X.values)
     Y = torch.FloatTensor(Y.values)
     return X, Y, label_interval
+
+# TODO: 대대적인 수정 필요
+# def load_data(path):
+#     load = pd.read_csv(path, index_col = 0)
+    
+    
+    
+#     num_of_days = len(load)
+#     X = load.iloc[0:num_of_days-1,:]
+#     Y = load.iloc[1:num_of_days,:]
+#     label_interval = get_label_interval(X)
+#     X = torch.FloatTensor(X.values)
+#     Y = torch.FloatTensor(Y.values)
+#     return X, Y, label_interval
 
 
 # get the number of days of each month as label_interval list
@@ -99,7 +106,7 @@ def get_label_interval(X):
 
 
 # split data into mini_train, valid, train, test
-def split_data(X, Y, batch_size, data_len, train_pie, mini_train_pie):
+def split_data(X, Y, batch_size, data_len, train_pie, mini_train_pie, num_of_features):
     train_size = int(data_len * train_pie)
     mini_train_size = int(train_size * mini_train_pie)
     
@@ -266,133 +273,136 @@ def calculate_loss(test_output, test_y, hor, mse, mae, mape, f):
     plot(0, 8, test_output, test_y, (20, 5), 'Actual and forecast load for 8 days', 18, dir+f'plots/forecasted_load/{hor_ver}_{file_name}.png')
 
 
+def program(building):
+
+    set_seed(RANDOM_SEED)
+    model_case = 1
+    num_of_features = 50
+    mae = nn.L1Loss()
+    mape = MAPE()
 
 
-set_seed(RANDOM_SEED)
-model_case = int(sys.argv[1])
-num_of_features = int(sys.argv[2])
-basic_path = sys.argv[3]
-mae = nn.L1Loss()
-mape = MAPE()
+    # data loading
+    # X: 210101-211230, Y: 210102-211231 / 364*25 (24h+1flag)
+    # X: 210104-211229, Y: 210105-211230 / 234x24 (24h)
+    X, Y, label_interval = load_data(building)
+    dataset = DC.CustomDataset(X, Y)
+    data_len = len(dataset)
+    mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, 32, data_len, 0.8, 0.8, num_of_features)
+    # 232개   210101 ~ 210820
+    # 59개    210821 ~ 211018
+    # 291개   210101 ~ 211018
+    # 73개    211019 ~ 211230
+    # --------------------------------------------------
+    # 148개   210104 ~ 210819
+    # 38개    210820 ~ 211015
+    # 186개   210104 ~ 211015
+    # 47개    211018 ~ 211229
 
 
-# data loading
-# X: 210101-211230, Y: 210102-211231 / 364*25 (24h+1flag)
-# X: 210104-211229, Y: 210105-211230 / 234x24 (24h)
-X, Y, label_interval = load_data(basic_path)
-dataset = DC.CustomDataset(X, Y)
-data_len = len(dataset)
-mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, 32, data_len, 0.8, 0.8)
-# 232개   210101 ~ 210820
-# 59개    210821 ~ 211018
-# 291개   210101 ~ 211018
-# 73개    211019 ~ 211230
-# --------------------------------------------------
-# 148개   210104 ~ 210819
-# 38개    210820 ~ 211015
-# 186개   210104 ~ 211015
-# 47개    211018 ~ 211229
+    # load plotting
+    dir = './experiment_outputs/load_forecast/'
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%m%d_%H%M")
 
 
-# load plotting
-dir = './experiment_outputs/load_forecast/'
-now = datetime.datetime.now()
-timestamp = now.strftime("%m%d_%H%M")
+    file_name = f'horizon_{building}_{timestamp}_{model_case}_{num_of_features}'
+    # plot_daily_load(X, label_interval, (10,4), "Daily Load Sum in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
 
 
-file_name = f'{model_case}_{EPOCHS}_{LEARNING_RATE}_{BATCH_SIZE}_{timestamp}'
-plot_daily_load(X, label_interval, (10,4), "Daily Load Sum in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+    # model setting
+    model_config = {'case': model_case}
+    model = Net(num_of_features, **model_config).to(DEVICE)
+    optimizer = optim.Adam(model.parameters(), lr = LEARNING_RATE)
+    criterion = nn.MSELoss(reduction='sum').to(DEVICE)
+    criterion2 = nn.MSELoss(reduction = 'mean').to(DEVICE)
 
 
-# model setting
-model_config = {'case': model_case}
-model = Net(num_of_features, **model_config).to(DEVICE)
-optimizer = optim.Adam(model.parameters(), lr = LEARNING_RATE)
-criterion = nn.MSELoss(reduction='sum').to(DEVICE)
-criterion2 = nn.MSELoss(reduction = 'mean').to(DEVICE)
+    # file to save the results
+    f = open(dir+f"results/{file_name}.txt", 'w')
 
 
-# file to save the results
-f = open(dir+f"results/{file_name}.txt", 'w')
+    # model training and validation
+    mini_train_loss_arr = []
+    val_loss_arr = []
 
+    best_val_loss = float('inf')
+    best_val_epoch = 0
+    patience = 0
 
-# model training and validation
-mini_train_loss_arr = []
-val_loss_arr = []
+    for epoch in range(EPOCHS):
+        mini_train_loss = train(model, mini_train_dataloader, optimizer, criterion)
+        mini_train_loss_arr.append(mini_train_loss)
+        val_output, val_y = validate(model, valid_dataloader)
+        val_loss = criterion2(val_output, val_y)
+        val_loss_arr.append(val_loss)
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_val_epoch = epoch
+            patience = 0
+        # early stopping
+        else:
+            patience+=1
+            if patience > 1:
+                print(f'Patience is increased, patience: {patience}', file = f)
+        if epoch % 500 == 0:
+            # write a log on file
+            print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
+        if patience == 3:
+            break
+        
+        
+    print('-'*80, file = f)
+    print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
+    print('-'*80, file = f)
+    print('-'*80, file = f)
 
-best_val_loss = float('inf')
-best_val_epoch = 0
-patience = 0
-
-for epoch in range(EPOCHS):
-    mini_train_loss = train(model, mini_train_dataloader, optimizer, criterion)
-    mini_train_loss_arr.append(mini_train_loss)
-    val_output, val_y = validate(model, valid_dataloader)
-    val_loss = criterion2(val_output, val_y)
-    val_loss_arr.append(val_loss)
-    if val_loss < best_val_loss:
-        best_val_loss = val_loss
-        best_val_epoch = epoch
-        patience = 0
-    # early stopping
-    else:
-        patience+=1
-        if patience > 1:
-            print(f'Patience is increased, patience: {patience}', file = f)
-    if epoch % 500 == 0:
-        # write a log on file
-        print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
-    if patience == 3:
-        break
-    
-    
-print('-'*80, file = f)
-print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
-print('-'*80, file = f)
-print('-'*80, file = f)
-
-plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch=best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
-
-
-
-# training and testing
-set_seed(RANDOM_SEED)
-
-for epoch in range(best_val_epoch):
-    train_loss = train(model, train_dataloader, optimizer, criterion)
-    if epoch % 500 == 0:
-        print(f'Train Epoch: {epoch:4d}/{best_val_epoch}  |  Train Loss {train_loss:.6f}', file = f)
-
-test_output, test_y, horizon = evaluate(model, test_dataloader)
-
-
-'''
-Horizon
-0: 1 (the first element)
-1: 175
-2: 8
-3: 42
-4: 5
-5: 1
-6: 1
-11: 1
-'''
-
-hor_1 = []
-hor_3 = []
-
-for i in range(len(horizon)):
-    if int(horizon[i].item()) == 1:
-        hor_1.append(i)
-    elif int(horizon[i].item()) == 3:
-        hor_3.append(i)
-
-
-calculate_loss(test_output, test_y, hor_1, criterion2, mae, mape, f)
-calculate_loss(test_output, test_y, hor_3, criterion2, mae, mape, f)
+    # plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch=best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
 
 
 
-f.close()
+    # training and testing
+    set_seed(RANDOM_SEED)
 
-torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
+    for epoch in range(best_val_epoch):
+        train_loss = train(model, train_dataloader, optimizer, criterion)
+        if epoch % 500 == 0:
+            print(f'Train Epoch: {epoch:4d}/{best_val_epoch}  |  Train Loss {train_loss:.6f}', file = f)
+
+    test_output, test_y, horizon = evaluate(model, test_dataloader)
+
+
+    '''
+    Horizon
+    0: 1 (the first element)
+    1: 175
+    2: 8
+    3: 42
+    4: 5
+    5: 1
+    6: 1
+    11: 1
+    '''
+
+    hor_1 = []
+    hor_3 = []
+
+    for i in range(len(horizon)):
+        if int(horizon[i].item()) == 1:
+            hor_1.append(i)
+        elif int(horizon[i].item()) == 3:
+            hor_3.append(i)
+
+
+    calculate_loss(test_output, test_y, hor_1, criterion2, mae, mape, f)
+    calculate_loss(test_output, test_y, hor_3, criterion2, mae, mape, f)
+
+
+
+    f.close()
+
+    torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
+
+
+for building in ['RISE', 'MACH', 'DORM']:
+    program(building)

@@ -1,0 +1,44 @@
+Train Epoch:    0/50000  |  Train Loss 1091322.125000  |  Val Loss 1249417.500000
+Train Epoch:  500/50000  |  Train Loss 899818.062500  |  Val Loss 1029594.812500
+Train Epoch: 1000/50000  |  Train Loss 731341.500000  |  Val Loss 836285.500000
+Train Epoch: 1500/50000  |  Train Loss 583985.687500  |  Val Loss 667286.500000
+Train Epoch: 2000/50000  |  Train Loss 457191.125000  |  Val Loss 521993.593750
+Train Epoch: 2500/50000  |  Train Loss 350152.875000  |  Val Loss 399403.968750
+Train Epoch: 3000/50000  |  Train Loss 261762.328125  |  Val Loss 298184.125000
+Train Epoch: 3500/50000  |  Train Loss 189987.000000  |  Val Loss 215950.609375
+Train Epoch: 4000/50000  |  Train Loss 133043.031250  |  Val Loss 150772.062500
+Train Epoch: 4500/50000  |  Train Loss 89570.632812  |  Val Loss 101159.515625
+Train Epoch: 5000/50000  |  Train Loss 57425.855469  |  Val Loss 64637.406250
+Train Epoch: 5500/50000  |  Train Loss 34758.074219  |  Val Loss 39055.277344
+Train Epoch: 6000/50000  |  Train Loss 20255.673828  |  Val Loss 22743.958984
+Train Epoch: 6500/50000  |  Train Loss 11987.747070  |  Val Loss 13602.395508
+Train Epoch: 7000/50000  |  Train Loss 7731.695801  |  Val Loss 8932.402344
+Train Epoch: 7500/50000  |  Train Loss 5696.715332  |  Val Loss 6594.386230
+Train Epoch: 8000/50000  |  Train Loss 4985.316406  |  Val Loss 5853.153320
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 8035  |  The Best Validation Error: 5842.4404
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/8035  |  Train Loss 5140.9438
+Train Epoch:  500/8035  |  Train Loss 5038.0483
+Train Epoch: 1000/8035  |  Train Loss 5007.2974
+Train Epoch: 1500/8035  |  Train Loss 4977.1450
+Train Epoch: 2000/8035  |  Train Loss 4947.3335
+Train Epoch: 2500/8035  |  Train Loss 4918.1294
+Train Epoch: 3000/8035  |  Train Loss 4889.7905
+Train Epoch: 3500/8035  |  Train Loss 4862.2095
+Train Epoch: 4000/8035  |  Train Loss 4835.0420
+Train Epoch: 4500/8035  |  Train Loss 4808.0220
+Train Epoch: 5000/8035  |  Train Loss 4782.0396
+Train Epoch: 5500/8035  |  Train Loss 4756.5288
+Train Epoch: 6000/8035  |  Train Loss 4731.3481
+Train Epoch: 6500/8035  |  Train Loss 4707.0142
+Train Epoch: 7000/8035  |  Train Loss 4683.0830
+Train Epoch: 7500/8035  |  Train Loss 4659.6724
+Train Epoch: 8000/8035  |  Train Loss 4636.6665
+Test Loss
+MSE: 3676.0540
+MAE: 43.8479
+MAPE(%): 5.5284

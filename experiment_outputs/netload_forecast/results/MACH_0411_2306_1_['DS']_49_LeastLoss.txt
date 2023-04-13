@@ -1,0 +1,23 @@
+Train Epoch:    0/50000  |  Train Loss 90545.531250  |  Val Loss 104174.281250
+Train Epoch:  500/50000  |  Train Loss 53792.296875  |  Val Loss 61391.121094
+Train Epoch: 1000/50000  |  Train Loss 18303.578125  |  Val Loss 20140.804688
+Train Epoch: 1500/50000  |  Train Loss 4584.219727  |  Val Loss 4316.126465
+Train Epoch: 2000/50000  |  Train Loss 1764.814941  |  Val Loss 1385.947998
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 2111  |  The Best Validation Error: 1335.856567
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/2111  |  Train Loss 1610.739746
+Train Epoch:  500/2111  |  Train Loss 1531.236938
+Train Epoch: 1000/2111  |  Train Loss 1496.229004
+Train Epoch: 1500/2111  |  Train Loss 1470.637817
+Train Epoch: 2000/2111  |  Train Loss 1450.261597
+Test Loss
+MSE: 1510.2146
+MAE: 29.4479
+MAPE(%): 9.1188

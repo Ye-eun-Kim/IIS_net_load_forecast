@@ -1,0 +1,36 @@
+Train Epoch:    0/50000  |  Train Loss 84269.750000  |  Val Loss 95325.664062
+Train Epoch:  500/50000  |  Train Loss 67299.179688  |  Val Loss 75428.820312
+Train Epoch: 1000/50000  |  Train Loss 52886.515625  |  Val Loss 58573.921875
+Train Epoch: 1500/50000  |  Train Loss 40781.546875  |  Val Loss 44517.558594
+Train Epoch: 2000/50000  |  Train Loss 30803.904297  |  Val Loss 33056.046875
+Train Epoch: 2500/50000  |  Train Loss 22698.712891  |  Val Loss 23843.148438
+Train Epoch: 3000/50000  |  Train Loss 16184.506836  |  Val Loss 16528.023438
+Train Epoch: 3500/50000  |  Train Loss 11120.608398  |  Val Loss 10916.281250
+Train Epoch: 4000/50000  |  Train Loss 7363.283203  |  Val Loss 6809.630859
+Train Epoch: 4500/50000  |  Train Loss 4771.146973  |  Val Loss 4072.631836
+Train Epoch: 5000/50000  |  Train Loss 3183.900391  |  Val Loss 2514.546387
+Train Epoch: 5500/50000  |  Train Loss 2343.684082  |  Val Loss 1766.321655
+Train Epoch: 6000/50000  |  Train Loss 1990.629272  |  Val Loss 1531.459595
+Patience is increased, patience: 2
+Patience is increased, patience: 3
+--------------------------------------------------------------------------------
+The Best Epoch: 6392  |  The Best Validation Error: 1483.7451
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+Train Epoch:    0/6392  |  Train Loss 1806.3789
+Train Epoch:  500/6392  |  Train Loss 1742.7267
+Train Epoch: 1000/6392  |  Train Loss 1715.6952
+Train Epoch: 1500/6392  |  Train Loss 1690.1938
+Train Epoch: 2000/6392  |  Train Loss 1666.1642
+Train Epoch: 2500/6392  |  Train Loss 1643.7158
+Train Epoch: 3000/6392  |  Train Loss 1622.5626
+Train Epoch: 3500/6392  |  Train Loss 1602.6676
+Train Epoch: 4000/6392  |  Train Loss 1584.0441
+Train Epoch: 4500/6392  |  Train Loss 1566.5685
+Train Epoch: 5000/6392  |  Train Loss 1550.2207
+Train Epoch: 5500/6392  |  Train Loss 1534.9213
+Train Epoch: 6000/6392  |  Train Loss 1520.5856
+Test Loss
+MSE: 1693.6709
+MAE: 31.2839
+MAPE(%): 9.6036

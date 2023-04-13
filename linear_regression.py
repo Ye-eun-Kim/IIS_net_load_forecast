@@ -76,7 +76,7 @@ def set_seed(seed):
 
 
 # load the data and split into X and Y
-def load_data(building, data):
+def load_data(building, data, drop_features):
     
     if data == 'load':
         X = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
@@ -85,6 +85,7 @@ def load_data(building, data):
     elif data == 'netload':    
         X = pd.read_csv(f'./processed_data/netload/X_netload_231days_{building}_49features.csv', index_col=0)
         Y = pd.read_csv(f'./processed_data/netload/Y_netload_231days_{building}.csv', index_col=0)
+        X = X.drop(columns = drop_features)
         
     elif data == 'pv':
         X = pd.read_csv(f'./processed_data/pv/X_pv_231days_{building}.csv', index_col=0)
@@ -280,9 +281,8 @@ def evaluate(model, valid_dataloader):
 
 
 
-def program(data, building):
+def program(data, building,drop_features):
     set_seed(RANDOM_SEED)
-    model_case = 1
     building = building
     mae = nn.L1Loss()
     mape = MAPE()
@@ -290,7 +290,7 @@ def program(data, building):
     
     # data loading
     # X: 210104-211229, Y: 210105-211230 / 231*50
-    X, Y, col_list, col_len, label_interval = load_data(building, data)
+    X, Y, col_list, col_len, label_interval = load_data(building, data,drop_features)
     dataset = DC.CustomDataset(X, Y)
     data_len = len(dataset)
     mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
@@ -306,7 +306,7 @@ def program(data, building):
     now = datetime.datetime.now()
     timestamp = now.strftime("%m%d_%H%M")
 
-    file_name = f'{data}_{building}_{timestamp}_{col_len}'
+    file_name = f'{data}_{building}_{timestamp}_{drop_features}_{col_len}'
     # _path = dir+"plots/daily_netload_features/"+file_name
     # create_folder(_path)
     # plot_daily_feature(X, label_interval, col_list, (10,2.5), 8, mini_train_size-1, train_size-1, _path+'/')
@@ -406,12 +406,17 @@ def program(data, building):
     
     
     
-# program('netload', 'RISE')
-# program('load', 'RISE')
-program('pv', 'RISE')
-# program('netload', 'DORM')
-# program('load', 'DORM')
-program('pv', 'DORM')
-# program('netload', 'MACH')
-# program('load', 'MACH')
-program('pv', 'MACH')    
+
+# feature_list = ['DS', 'SL', 'SR', ['TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18'], ['WS_6', 'WS_9', 'WS_12', 'WS_15', 'WS_18'], ['SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18'], ['PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18'], ['PR_9', 'PR_15', 'PR_21']]
+# for building in ['RISE', 'DORM', 'MACH']:
+#     for feature in feature_list:
+#         if type(feature) == list:
+#             drop_features = feature
+#         else:
+#             drop_features = []
+#             drop_features.append(feature)
+#         program('netload',building, drop_features)
+
+feature_list = ['DS', 'SL', 'SR', ['TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18'], ['WS_6', 'WS_9', 'WS_12', 'WS_15', 'WS_18'], ['SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18'], ['PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18'], ['PR_9', 'PR_15', 'PR_21']]
+for building in ['RISE', 'DORM', 'MACH']:
+    program('netload', building, ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18'])

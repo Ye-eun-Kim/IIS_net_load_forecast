@@ -78,37 +78,29 @@ def create_folder(directory):
 
 
 # load the data and split into X and Y
-def load_data(building, num_of_features):
-    if num_of_features == 49 :
-        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
-        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
-        X_load = X_load.drop(columns = ['SL'])
-        Y_load = Y_load.drop(columns = ['SL'])
-
-    elif num_of_features == 24 :
+def load_data(building, num_of_features, drop_features):
+    if num_of_features == 24 :
         X = pd.read_csv(f'./processed_data/load/X_load_231days_{building}.csv', index_col=0)
         Y = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
         
-        
-    elif num_of_features == 29 :
-        X_load = pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
-        Y_load = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}_weather.csv', index_col=0)
-        X_load = X_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
-        Y_load = Y_load.drop(columns = ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18', 'SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18','PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18', 'PR_9', 'PR_15', 'PR_21'])
+    else :
+        X= pd.read_csv(f'./processed_data/load/X_load_231days_{building}_weather.csv', index_col=0)
+        Y = pd.read_csv(f'./processed_data/load/Y_load_231days_{building}.csv', index_col=0)
+        X = X.drop(columns = drop_features)
 
 
-    # wavelet transform
-    for i in range(X.shape[0]):
-        coeffs = pywt.wavedec(X.iloc[i,:], 'db4', level=8)
-        for j in [1,2]:
-            coeffs[j] = np.zeros_like(coeffs[j])
-        X_wav = pywt.waverec(coeffs, 'db4')
-        X.iloc[i,:] = X_wav[:]
+    # # wavelet transform
+    # for i in range(X.shape[0]):
+    #     coeffs = pywt.wavedec(X.iloc[i,:], 'db4', level=8)
+    #     for j in [1,2]:
+    #         coeffs[j] = np.zeros_like(coeffs[j])
+    #     X_wav = pywt.waverec(coeffs, 'db4')
+    #     X.iloc[i,:] = X_wav[:]
         
         
     label_interval = get_label_interval(X)
     X = torch.FloatTensor(X.values)
-    Y = torch.FloatTensor(Y.iloc[:,0:24].values)
+    Y = torch.FloatTensor(Y.values)
     return X, Y, label_interval
 
 
@@ -269,120 +261,137 @@ def evaluate(model, valid_dataloader):
             
         return output, y
 
-
-set_seed(RANDOM_SEED)
-model_case = 1
-building = sys.argv[1]
-num_of_features = 24
-# num_of_features = int(sys.argv[2])
-mae = nn.L1Loss()
-mape = MAPE()
-
-
-
-# data loading
-# X: 210104-211229, Y: 210105-211230 / 231*50
-X, Y, label_interval = load_data(building, num_of_features)
-dataset = DC.CustomDataset(X, Y)
-data_len = len(dataset)
-mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
-# 147개   210104 ~ 210818
-# 37개    210819 ~ 211014
-# 184개   210104 ~ 211014
-# 47개    211017 ~ 211229
-
-
-# load plotting
-dir = './experiment_outputs/load_forecast/'
-now = datetime.datetime.now()
-timestamp = now.strftime("%m%d_%H%M")
-
-file_name = f'{building}_{timestamp}_{model_case}_{num_of_features}'
-plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
-
-
-# model setting
-model_config = {'case': model_case}
-model = Net(num_of_features, **model_config).to(DEVICE)
-optimizer = optim.Adam(model.parameters(), lr = LEARNING_RATE)
-criterion = nn.MSELoss(reduction='sum').to(DEVICE)
-criterion2 = nn.MSELoss(reduction = 'mean').to(DEVICE)
-
-
-# file to save the results
-f = open(dir+f"results/{file_name}.txt", 'w')
-
-
-# model training and validation
-mini_train_loss_arr = []
-val_loss_arr = []
-
-best_val_loss = float('inf')
-best_val_epoch = 0
-patience = 0
-
-for epoch in range(EPOCHS):
-    mini_train_loss = train(model, mini_train_dataloader, optimizer, criterion)
-    mini_train_loss_arr.append(mini_train_loss)
-    val_output, val_y = evaluate(model, valid_dataloader)
-    val_loss = criterion2(val_output, val_y)
-    val_loss_arr.append(val_loss)
-    if val_loss < best_val_loss:
-        best_val_loss = val_loss
-        best_val_epoch = epoch
-        patience = 0
-    # # early stopping
-    # else:
-    #     patience+=1
-    #     if patience > 1:
-    #         print(f'Patience is increased, patience: {patience}', file = f)
-    # if epoch % 500 == 0:
-    #     # write a log on file
-    #     print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.6f}  |  Val Loss {val_loss:.6f}', file = f)
-    # if patience == 3:
-    #     break
-        
-print('-'*80, file = f)
-print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.6f}', file = f)
-print('-'*80, file = f)  
-print('-'*80, file = f)
-
-plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch=best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
+def program(building, num_of_features, drop_features):
+    set_seed(RANDOM_SEED)
+    model_case = 1
+    building = building
+    num_of_features = num_of_features
+    # num_of_features = int(sys.argv[2])
+    mae = nn.L1Loss()
+    mape = MAPE()
 
 
 
-# training and testing
-set_seed(RANDOM_SEED)
-
-for epoch in range(best_val_epoch):
-    train_loss = train(model, train_dataloader, optimizer, criterion)
-    if epoch % 500 == 0:
-        print(f'Train Epoch: {epoch:4d}/{best_val_epoch}  |  Train Loss {train_loss:.6f}', file = f)
-
-test_output, test_y = evaluate(model, test_dataloader)
-
-test_mse = criterion2(test_output[:, 0:24], test_y[:, 0:24])
-test_mae = mae(test_output[:, 0:24], test_y[:, 0:24])
-test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
-
-print('Test Loss', file = f)
-print('MSE: {:.6f}'.format(test_mse), file = f)
-print('MAE: {:.6f}'.format(test_mae), file = f)
-print('MAPE(%): {:.6f}'.format(test_mape*100), file = f)
+    # data loading
+    # X: 210104-211229, Y: 210105-211230 / 231*50
+    X, Y, label_interval = load_data(building, num_of_features, drop_features)
+    dataset = DC.CustomDataset(X, Y)
+    data_len = len(dataset)
+    mini_train_dataloader, valid_dataloader, train_dataloader, test_dataloader, mini_train_size, train_size =  split_data(X, Y, BATCH_SIZE, data_len, 0.8, 0.8)
+    # 147개   210104 ~ 210818
+    # 37개    210819 ~ 211014
+    # 184개   210104 ~ 211014
+    # 47개    211017 ~ 211229
 
 
+    # load plotting
+    dir = './experiment_outputs/load_forecast/'
+    now = datetime.datetime.now()
+    timestamp = now.strftime("%m%d_%H%M")
 
-plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 8 days', 18, dir+f'plots/forecasted_load/{file_name}.png')
+    file_name = f'{building}_{timestamp}_{model_case}_{num_of_features}'
+    # plot_daily_load(X, label_interval, (10,4), f"Daily Load Sum of {building} in 2021", 8, mini_train_size-1, train_size-1, dir+"plots/daily_load/"+file_name+'.png')
+
+
+    # model setting
+    model_config = {'case': model_case}
+    model = Net(num_of_features, **model_config).to(DEVICE)
+    optimizer = optim.Adam(model.parameters(), lr = LEARNING_RATE)
+    criterion = nn.MSELoss(reduction='sum').to(DEVICE)
+    criterion2 = nn.MSELoss(reduction = 'mean').to(DEVICE)
+
+
+    # file to save the results
+    f = open(dir+f"results/{file_name}.txt", 'w')
+
+
+    # model training and validation
+    mini_train_loss_arr = []
+    val_loss_arr = []
+
+    best_val_loss = float('inf')
+    best_val_epoch = 0
+    patience = 0
+
+    for epoch in range(EPOCHS):
+        mini_train_loss = train(model, mini_train_dataloader, optimizer, criterion)
+        mini_train_loss_arr.append(mini_train_loss)
+        val_output, val_y = evaluate(model, valid_dataloader)
+        val_loss = criterion2(val_output, val_y)
+        val_loss_arr.append(val_loss)
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_val_epoch = epoch
+            patience = 0
+        # early stopping
+        else:
+            patience+=1
+            if patience > 1:
+                print(f'Patience is increased, patience: {patience}', file = f)
+        if epoch % 500 == 0:
+            # write a log on file
+            print(f'Train Epoch: {epoch:4d}/{EPOCHS}  |  Train Loss {mini_train_loss:.4f}  |  Val Loss {val_loss:.4f}', file = f)
+        if patience == 3:
+            break
+            
+    print('-'*80, file = f)
+    print(f'The Best Epoch: {best_val_epoch}  |  The Best Validation Error: {best_val_loss:.4f}', file = f)
+    print('-'*80, file = f)  
+    print('-'*80, file = f)
+
+    # plot_loss(mini_train_loss_arr, val_loss_arr, range_start=20, best_val_epoch=best_val_epoch+3, fig_size=(10,6), title = 'Training Performance of the Model', font_size = 10, save_path = dir+f'plots/loss/{file_name}.png')
 
 
 
-f.close()
+    # training and testing
+    set_seed(RANDOM_SEED)
 
-torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
+    for epoch in range(best_val_epoch):
+        train_loss = train(model, train_dataloader, optimizer, criterion)
+        if epoch % 500 == 0:
+            print(f'Train Epoch: {epoch:4d}/{best_val_epoch}  |  Train Loss {train_loss:.4f}', file = f)
 
-# save test_output tensor to a csv file
-test_y_idx = [211018, 211019, 211020, 211021, 211022, 211025, 211026, 211027, 211028, 211101, 211102, 211103, 211104, 211105, 211108, 211109, 211110, 211111, 211112, 211115, 211116, 211118, 211119, 211122, 211123, 211124, 211125, 211126, 211129, 211201, 211202, 211203, 211206, 211207, 211208, 211209, 211213, 211214, 211215, 211216, 211217, 211220, 211221, 211227, 211228, 211229, 211230]
-test_output_ = test_output.detach().numpy()
-test_output_ = pd.DataFrame(test_output_, index = test_y_idx, columns = [f'{i:02d}' for i in range(24)])
-create_folder('./experiment_outputs/test_output/load/')
-test_output_.to_csv(f'./experiment_outputs/test_output/load/{file_name}.csv', index = True, header = True)
+    test_output, test_y = evaluate(model, test_dataloader)
+
+    test_mse = criterion2(test_output[:, 0:24], test_y[:, 0:24])
+    test_mae = mae(test_output[:, 0:24], test_y[:, 0:24])
+    test_mape = mape(test_output[:, 0:24], test_y[:, 0:24])
+
+    print('Test Loss', file = f)
+    print('MSE: {:.4f}'.format(test_mse), file = f)
+    print('MAE: {:.4f}'.format(test_mae), file = f)
+    print('MAPE(%): {:.4f}'.format(test_mape*100), file = f)
+
+
+
+    plot(0, 8, test_output[:, 0:24], test_y[:, 0:24], (20, 5), 'Actual and forecast load for 8 days', 18, dir+f'plots/forecasted_load/{file_name}.png')
+
+
+
+    f.close()
+
+    torch.save(model.state_dict(), dir+f'models/{file_name}.pt')
+
+    # save test_output tensor to a csv file
+    test_y_idx = [211018, 211019, 211020, 211021, 211022, 211025, 211026, 211027, 211028, 211101, 211102, 211103, 211104, 211105, 211108, 211109, 211110, 211111, 211112, 211115, 211116, 211118, 211119, 211122, 211123, 211124, 211125, 211126, 211129, 211201, 211202, 211203, 211206, 211207, 211208, 211209, 211213, 211214, 211215, 211216, 211217, 211220, 211221, 211227, 211228, 211229, 211230]
+    test_output_ = test_output.detach().numpy()
+    test_output_ = pd.DataFrame(test_output_, index = test_y_idx, columns = [f'{i:02d}' for i in range(24)])
+    create_folder('./experiment_outputs/test_output/load/')
+    test_output_.to_csv(f'./experiment_outputs/test_output/load/{file_name}.csv', index = True, header = True)
+    
+
+
+# feature_list = ['DS', 'SL', 'SR', ['TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18'], ['WS_6', 'WS_9', 'WS_12', 'WS_15', 'WS_18'], ['SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18'], ['PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18'], ['PR_9', 'PR_15', 'PR_21']]
+# for building in ['RISE', 'DORM', 'MACH']:
+#     for feature in feature_list:
+#         if type(feature) == list:
+#             drop_features = feature
+#         else:
+#             drop_features = []
+#             drop_features.append(feature)
+#         num_of_features = 50-len(drop_features)
+#         program(building, num_of_features, drop_features)
+#     program(building, 42, ['DS', 'SL', 'SR', 'WS_6', 'WS_9','WS_12', 'WS_15', 'WS_18'])
+feature_list = ['DS', 'SL', 'SR', ['TM_6', 'TM_9', 'TM_12', 'TM_15', 'TM_18'], ['WS_6', 'WS_9', 'WS_12', 'WS_15', 'WS_18'], ['SK_6', 'SK_9', 'SK_12', 'SK_15', 'SK_18'], ['PP_6', 'PP_9', 'PP_12', 'PP_15', 'PP_18'], ['PR_9', 'PR_15', 'PR_21']]
+for building in ['RISE', 'DORM', 'MACH']:
+    program(building,50, [])
